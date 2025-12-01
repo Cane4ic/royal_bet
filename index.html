@@ -483,61 +483,66 @@
     }
 
     /* ===== АДАПТИВ ДЛЯ ТЕЛЕФОНОВ ===== */
-    @media (max-width: 768px) {
-      .sidebar {
-        left: -260px;             /* прячем за экран */
-      }
-      .sidebar.open {
-        left: 0;                  /* выезжает */
-      }
+    /* ===== АДАПТИВ ДЛЯ ТЕЛЕФОНОВ ===== */
+@media (max-width: 768px) {
+  /* опускаем всё содержимое еще ниже, под шапку Telegram */
+  .top-bar {
+    left: 0;
+    top: 70px;                 /* было 10px — стало 70px */
+    padding: 0 10px;
+  }
 
-      .top-bar {
-        left: 0;
-        top: 10px;
-        padding: 0 10px;
-      }
+  /* чтобы и выезжающий сайдбар начинался не под самым верхом */
+  .sidebar {
+    top: 70px;                 /* тоже опускаем */
+    height: calc(100vh - 70px);
+    left: -260px;              /* скрыт по умолчанию */
+  }
+  .sidebar.open {
+    left: 0;
+  }
 
-      .logo-wrapper img {
-        height: 48px;
-      }
+  .logo-wrapper img {
+    height: 48px;
+  }
 
-      .top-bar-right {
-        gap: 8px;
-      }
+  .top-bar-right {
+    gap: 8px;
+  }
 
-      .wallet {
-        padding: 7px 10px;
-        font-size: 14px;
-        min-width: 110px;
-      }
+  .wallet {
+    padding: 7px 10px;
+    font-size: 14px;
+    min-width: 110px;
+  }
 
-      .wallet-symbol {
-        font-size: 18px;
-      }
+  .wallet-symbol {
+    font-size: 18px;
+  }
 
-      .btn-deposit {
-        padding: 8px 14px;
-        font-size: 14px;
-      }
+  .btn-deposit {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
 
-      .profile-avatar {
-        width: 36px;
-        height: 36px;
-      }
+  .profile-avatar {
+    width: 36px;
+    height: 36px;
+  }
 
-      .mobile-burger {
-        display: inline-flex;
-      }
+  .mobile-burger {
+    display: inline-flex;
+  }
 
-      .sidebar-top .burger-btn {
-        display: none;           /* внутри сайдбара бургер не нужен на мобиле */
-      }
+  .sidebar-top .burger-btn {
+    display: none;
+  }
 
-      .balance-panel {
-        width: calc(100vw - 24px);  /* чтобы не прилипало к краю на очень узких экранах */
-        max-width: 320px;
-      }
-    }
+  .balance-panel {
+    width: calc(100vw - 24px);
+    max-width: 320px;
+  }
+}
   </style>
 </head>
 <body>
@@ -785,3 +790,4 @@
 
 </body>
 </html>
+
