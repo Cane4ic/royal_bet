@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Royal Bet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Гладкий приятный шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent-start: #ffd84a;
+      --accent-end: #ff9a2b;
+
+      --text-main: #e7e9ef;
+      --text-soft: #9aa0ac;
+
+      --font: 'Inter', sans-serif;
+      --menu-font-size: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      font-family: var(--font);
+      color: var(--text-main);
+    }
+
+    /* ----------- САЙДБАР ----------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: #111318;
+      border-right: 1px solid #20232a;
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+      transition: left .2s ease-out;
+    }
+
+    .sidebar-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .burger-btn {
+      width: 40px;
+      height: 40px;
+      background: #1b1d23;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .mode-switch button {
+      padding: 7px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+    }
+
+    /* Поиск */
+    .search-input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: none;
+      background: #191b23;
+      color: var(--text-main);
+      font-size: 15px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    /* ---------- МЕНЮ ---------- */
+    .menu-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      margin: 12px 8px 6px;
+    }
+
+    .menu-list {
+      list-style: none;
+    }
+
+    .menu-item {
+      margin-bottom: 4px;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: var(--menu-font-size);
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .16s, color .16s;
+    }
+
+    .menu-link:hover {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .menu-link.active {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .menu-icon img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .divider {
+      height: 1px;
+      background: #20232a;
+      margin: 14px 0 10px;
+    }
+
+    /* --------- НИЖНЯЯ ЧАСТЬ --------- */
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    .bottom-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lang-btn {
+      width: 46px;
+      height: 38px;
+      background: #191b23;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .support-btn {
+      flex: 1;
+      height: 38px;
+      background: #191b23;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background .16s, color .16s;
+    }
+
+    .support-btn:hover {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .support-icon img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Бэкдроп для мобильного меню */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 15;
+      display: none;
+    }
+    .sidebar-backdrop.open {
+      display: block;
+    }
+
+    /* ---------- TOP BAR ---------- */
+    .top-bar {
+      position: fixed;
+      left: 260px;
+      right: 0;
+      top: 18px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 25;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-wrapper img {
+      height: 80px;
+      display: block;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    /* Мобильный бургер в топбаре */
+    .mobile-burger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: #fff;
+      font-size: 20px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Блок с балансом */
+    .wallet {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 12px;
+      background: #111318;
+      border: 1px solid #262932;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+      font-size: 15px;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    .wallet-balance {
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .wallet-arrow {
+      margin-left: auto;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .wallet:hover {
+      border-color: rgba(255, 216, 74, 0.8);
+    }
+
+    .wallet-symbol {
+      font-size: 20px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    /* Кнопка Пополнить */
+    .btn-deposit {
+      padding: 10px 22px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      box-shadow: 0 10px 20px rgba(255, 182, 70, 0.4);
+      white-space: nowrap;
+      transition: transform .12s ease-out, box-shadow .12s ease-out;
+    }
+
+    .btn-deposit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(255, 182, 70, 0.6);
+    }
+
+    /* Аватар */
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #343840, #111318);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+      cursor: pointer;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-status {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ff3f9c;
+      box-shadow: 0 0 0 2px #111318;
+    }
+
+    /* ===== ВЫПАДАЮЩЕЕ ОКНО БАЛАНСА ===== */
+
+    .balance-overlay {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      display: none;
+      z-index: 30;
+    }
+
+    .balance-overlay.open {
+      display: block;
+    }
+
+    .balance-panel {
+      position: absolute;
+      width: 280px;
+      padding: 16px 16px 14px;
+      border-radius: 14px;
+      background: #14161e;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.85);
+      color: var(--text-main);
+      font-size: 14px;
+    }
+
+    .balance-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .balance-label {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .balance-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .balance-main-amount {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    /* селект валюты */
+    .currency-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: #191b23;
+      border: 1px solid #262932;
+      cursor: pointer;
+      font-size: 13px;
+      min-width: 110px;
+    }
+
+    .currency-code {
+      font-weight: 500;
+    }
+
+    .select-arrow {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .currency-dropdown {
+      margin-top: 6px;
+      border-radius: 10px;
+      background: #191b23;
+      border: 1px solid #262932;
+      overflow: hidden;
+      display: none;
+    }
+
+    .currency-dropdown.open {
+      display: block;
+    }
+
+    .currency-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .currency-item:hover {
+      background: #23252f;
+    }
+
+    /* бонусный блок */
+    .bonus-card {
+      margin-top: 10px;
+      border-radius: 10px;
+      background: #191b23;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+    }
+
+    .bonus-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .bonus-arrow {
+      font-size: 14px;
+      color: #4b4f5a;
+    }
+
+    .bonus-amount {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .balance-wallet-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+    }
+
+    /* ===== АДАПТИВ ДЛЯ ТЕЛЕФОНОВ ===== */
+    @media (max-width: 768px) {
+      .sidebar {
+        left: -260px;             /* прячем за экран */
+      }
+      .sidebar.open {
+        left: 0;                  /* выезжает */
+      }
+
+      .top-bar {
+        left: 0;
+        top: 10px;
+        padding: 0 10px;
+      }
+
+      .logo-wrapper img {
+        height: 48px;
+      }
+
+      .top-bar-right {
+        gap: 8px;
+      }
+
+      .wallet {
+        padding: 7px 10px;
+        font-size: 14px;
+        min-width: 110px;
+      }
+
+      .wallet-symbol {
+        font-size: 18px;
+      }
+
+      .btn-deposit {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+
+      .profile-avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .mobile-burger {
+        display: inline-flex;
+      }
+
+      .sidebar-top .burger-btn {
+        display: none;           /* внутри сайдбара бургер не нужен на мобиле */
+      }
+
+      .balance-panel {
+        width: calc(100vw - 24px);  /* чтобы не прилипало к краю на очень узких экранах */
+        max-width: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- САЙДБАР -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <button class="burger-btn">☰</button>
+      <div class="mode-switch">
+        <button>Казино</button>
+      </div>
+    </div>
+
+    <input class="search-input" type="text" placeholder="Поиск" />
+
+    <!-- Главная -->
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link active" href="#">
+          <span class="menu-icon"><img src="icons/home.png"></span>
+          Главная
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/favorite.png"></span>
+          Избранное
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/bonus.png"></span>
+          Бонусы
+        </a>
+      </li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="menu-section-title">Игры</div>
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/slots.png"></span>
+          Слоты
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/popular.png"></span>
+          Популярные
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/fast.png"></span>
+          Быстрые игры
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/new.png"></span>
+          Новинки
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/recommended.png"></span>
+          Рекомендуемые
+        </a>
+      </li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="menu-section-title">Live Казино</div>
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/blackjack.png"></span>
+          Блэкджек
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/roulette.png"></span>
+          Рулетка
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/baccarat.png"></span>
+          Баккара
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <div class="divider"></div>
+      <div class="bottom-row">
+        <div class="lang-btn"></div>
+        <div class="support-btn">
+          <span class="support-icon"><img src="icons/support.png"></span>
+          Поддержка
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Бэкдроп для сайдбара (мобилка) -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="logo-wrapper">
+      <button class="mobile-burger" id="burgerToggle">☰</button>
+      <img src="logo.png" alt="Royal Bet">
+    </div>
+
+    <div class="top-bar-right">
+      <div class="wallet" id="walletBtn">
+        <span class="wallet-symbol" id="walletCurrencySymbol">₴</span>
+        <span class="wallet-balance">0.00</span>
+        <span class="wallet-arrow">▾</span>
+      </div>
+
+      <button class="btn-deposit">Пополнить</button>
+
+      <div class="profile-avatar">
+        <img src="icons/avatar.png" alt="">
+        <span class="profile-status"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ВЫПАДАЮЩЕЕ ОКНО БАЛАНСА -->
+  <div class="balance-overlay" id="balanceOverlay">
+    <div class="balance-panel" id="balancePanel">
+      <div class="balance-title">Баланс</div>
+
+      <div class="balance-label">Основной счет • <span id="currencyLabel">UAH</span></div>
+      <div class="balance-main-row">
+        <div class="balance-main-amount">0.00₴</div>
+
+        <!-- СЕЛЕКТ ВАЛЮТЫ -->
+        <button class="currency-select" type="button" id="currencySelect">
+          <span class="currency-code" id="currencyCodeText">UAH</span>
+          <span class="select-arrow">▾</span>
+        </button>
+      </div>
+
+      <!-- ДРОПДАУН ВАЛЮТ -->
+      <div class="currency-dropdown" id="currencyDropdown">
+        <div class="currency-item" data-code="UAH" data-symbol="₴">
+          <span>₴</span><span>UAH</span>
+        </div>
+        <div class="currency-item" data-code="USD" data-symbol="$">
+          <span>$</span><span>USD</span>
+        </div>
+        <div class="currency-item" data-code="EUR" data-symbol="€">
+          <span>€</span><span>EUR</span>
+        </div>
+      </div>
+
+      <!-- Бонусный счет -->
+      <div class="bonus-card">
+        <div class="bonus-row-top">
+          <span>Бонусный счет</span>
+          <span class="bonus-arrow">›</span>
+        </div>
+        <div class="bonus-amount">0.00₴</div>
+      </div>
+
+      <button class="balance-wallet-btn">Кошелек</button>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+    const burgerToggle = document.getElementById('burgerToggle');
+
+    const walletBtn = document.getElementById('walletBtn');
+    const balanceOverlay = document.getElementById('balanceOverlay');
+    const balancePanel = document.getElementById('balancePanel');
+    const currencySelect = document.getElementById('currencySelect');
+    const currencyDropdown = document.getElementById('currencyDropdown');
+    const currencyCodeText = document.getElementById('currencyCodeText');
+    const currencyLabel = document.getElementById('currencyLabel');
+    const walletCurrencySymbol = document.getElementById('walletCurrencySymbol');
+
+    // Открытие/закрытие сайдбара (мобилка)
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarBackdrop.classList.toggle('open');
+    }
+
+    burgerToggle.addEventListener('click', toggleSidebar);
+    sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+    // открыть/закрыть окно баланса и выставить позицию под кошельком
+    walletBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const rect = walletBtn.getBoundingClientRect();
+      balancePanel.style.left = rect.left + 'px';
+      balancePanel.style.top = (rect.bottom + 8) + 'px';
+      balanceOverlay.classList.toggle('open');
+      currencyDropdown.classList.remove('open');
+    });
+
+    // клик по оверлею: закрыть, если кликнули вне панели
+    balanceOverlay.addEventListener('click', (e) => {
+      if (!e.target.closest('.balance-panel')) {
+        balanceOverlay.classList.remove('open');
+        currencyDropdown.classList.remove('open');
+      }
+    });
+
+    // селект валюты
+    currencySelect.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currencyDropdown.classList.toggle('open');
+    });
+
+    // выбор валюты в списке
+    currencyDropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.currency-item');
+      if (!item) return;
+
+      const code   = item.getAttribute('data-code');
+      const symbol = item.getAttribute('data-symbol');
+
+      currencyCodeText.textContent = code;
+      currencyLabel.textContent = code;
+      walletCurrencySymbol.textContent = symbol;
+
+      document.querySelectorAll('.balance-main-amount, .bonus-amount')
+        .forEach(el => {
+          el.textContent = '0.00' + symbol;
+        });
+
+      currencyDropdown.classList.remove('open');
+    });
+  </script>
+
+</body>
+</html>
