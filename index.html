@@ -1101,6 +1101,60 @@
       background: #2a2d39;
       color: #a8ffb6;
     }
+    .page-content {
+  margin-left: 260px;          /* чтобы не заезжать на сайдбар */
+  padding: 120px 40px 40px;    /* отступ вниз от топ-бара */
+}
+
+.promo-section {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.promo-grid {
+  display: flex;
+  gap: 40px;
+}
+
+/* сам баннер */
+.promo-banner {
+  flex: 1;
+  height: 320px;
+  border-radius: 20px;
+  border: 2px solid red;                /* как твои красные рамки, можешь убрать */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+  .page-content {
+    margin-left: 260px;
+    padding: 100px 20px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    margin-left: 0;
+    padding: 90px 16px 24px;
+  }
+
+  .promo-grid {
+    gap: 16px;
+  }
+
+  .promo-banner {
+    display: none;   /* по умолчанию скрываем все на мобилке */
+    flex: none;
+    width: 100%;
+  }
+
+  .promo-banner.active {
+    display: block;  /* показываем только активный баннер */
+  }
+}
 
     /* ===== АДАПТИВ ===== */
     @media (max-width: 768px) {
@@ -1333,6 +1387,21 @@
       </div>
     </div>
   </header>
+<main class="page-content">
+  <section class="promo-section">
+    <div class="promo-grid">
+      <div class="promo-banner" data-promo="1"
+           style="background-image: url('banners/promo1.jpg');">
+      </div>
+      <div class="promo-banner" data-promo="2"
+           style="background-image: url('banners/promo2.jpg');">
+      </div>
+      <div class="promo-banner" data-promo="3"
+           style="background-image: url('banners/promo3.jpg');">
+      </div>
+    </div>
+  </section>
+</main>
 
   <!-- BALANCE POPUP -->
   <div class="balance-overlay" id="balanceOverlay">
@@ -2032,6 +2101,46 @@
         withdrawDropdown.classList.remove('open');
       }
     });
+    /* ===== ПРОМО-БАННЕРЫ (слайдер на телефоне) ===== */
+const promoBanners = document.querySelectorAll('.promo-banner');
+let promoIndex = 0;
+let promoTimer = null;
+
+function updateMobilePromo() {
+  if (window.innerWidth <= 768 && promoBanners.length) {
+    // включаем карусель
+    promoBanners.forEach((banner, i) => {
+      banner.classList.toggle('active', i === promoIndex);
+    });
+
+    if (promoTimer) clearInterval(promoTimer);
+    promoTimer = setInterval(() => {
+      promoIndex = (promoIndex + 1) % promoBanners.length;
+      promoBanners.forEach((banner, i) => {
+        banner.classList.toggle('active', i === promoIndex);
+      });
+    }, 3000);
+  } else {
+    // десктоп: показываем все баннеры, карусель не нужна
+    if (promoTimer) {
+      clearInterval(promoTimer);
+      promoTimer = null;
+    }
+    promoBanners.forEach(banner => {
+      banner.classList.remove('active'); // на десктопе стили не завязаны на active
+    });
+  }
+}
+
+// первый запуск
+updateMobilePromo();
+
+// перестраиваем при ресайзе (смена ориентации / ширины)
+window.addEventListener('resize', () => {
+  updateMobilePromo();
+});
+
   </script>
 </body>
 </html>
+
