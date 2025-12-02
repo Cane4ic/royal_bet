@@ -1102,8 +1102,8 @@
       color: #a8ffb6;
     }
     .page-content {
-  margin-left: 260px;          /* чтобы не заезжать на сайдбар */
-  padding: 120px 40px 40px;    /* отступ вниз от топ-бара */
+  margin-left: 260px;
+  padding: 120px 40px 40px;
 }
 
 .promo-section {
@@ -1111,23 +1111,47 @@
   margin: 0 auto;
 }
 
-.promo-grid {
+.promo-layout {
   display: flex;
-  gap: 40px;
+  gap: 24px;
+  align-items: stretch;
 }
 
-/* сам баннер */
 .promo-banner {
-  flex: 1;
-  height: 320px;
   border-radius: 20px;
-  border: 2px solid red;                /* как твои красные рамки, можешь убрать */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
 }
 
-/* Адаптив */
+/* большой баннер слева */
+.promo-main {
+  flex: 2;
+  min-height: 320px;
+}
+
+/* маленький баннер справа */
+.promo-side {
+  flex: 1;
+  position: relative;
+  min-height: 320px;
+}
+
+.promo-side-banner {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease-out;
+}
+
+.promo-side-banner.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* адаптив */
 @media (max-width: 1024px) {
   .page-content {
     margin-left: 260px;
@@ -1141,18 +1165,20 @@
     padding: 90px 16px 24px;
   }
 
-  .promo-grid {
-    gap: 16px;
+  .promo-layout {
+    flex-direction: column;
   }
 
-  .promo-banner {
-    display: none;   /* по умолчанию скрываем все на мобилке */
+  .promo-main {
     flex: none;
     width: 100%;
+    min-height: 220px;
   }
 
-  .promo-banner.active {
-    display: block;  /* показываем только активный баннер */
+  /* на телефоне правый мини-баннер не показываем,
+     оставляем только один большой */
+  .promo-side {
+    display: none;
   }
 }
 
@@ -1389,19 +1415,25 @@
   </header>
 <main class="page-content">
   <section class="promo-section">
-    <div class="promo-grid">
-      <div class="promo-banner" data-promo="1"
-           style="background-image: url('banners/promo1.jpg');">
+    <div class="promo-layout">
+      <!-- большой баннер слева -->
+      <div class="promo-main promo-banner"
+           style="background-image:url('banners/promo1.jpg');">
       </div>
-      <div class="promo-banner" data-promo="2"
-           style="background-image: url('banners/promo2.jpg');">
-      </div>
-      <div class="promo-banner" data-promo="3"
-           style="background-image: url('banners/promo3.jpg');">
+
+      <!-- маленький баннер справа, будет меняться -->
+      <div class="promo-side">
+        <div class="promo-side-banner promo-banner active"
+             style="background-image:url('banners/promo2.jpg');">
+        </div>
+        <div class="promo-side-banner promo-banner"
+             style="background-image:url('banners/promo3.jpg');">
+        </div>
       </div>
     </div>
   </section>
 </main>
+
 
   <!-- BALANCE POPUP -->
   <div class="balance-overlay" id="balanceOverlay">
@@ -2101,46 +2133,66 @@
         withdrawDropdown.classList.remove('open');
       }
     });
-    /* ===== ПРОМО-БАННЕРЫ (слайдер на телефоне) ===== */
-const promoBanners = document.querySelectorAll('.promo-banner');
-let promoIndex = 0;
-let promoTimer = null;
+   /* ===== ПРОМО-БАННЕРЫ ===== */
+const promoMain = document.querySelector('.promo-main');
+const promoSideBanners = document.querySelectorAll('.promo-side-banner');
 
-function updateMobilePromo() {
-  if (window.innerWidth <= 768 && promoBanners.length) {
-    // включаем карусель
-    promoBanners.forEach((banner, i) => {
-      banner.classList.toggle('active', i === promoIndex);
+const promoImages = [
+  'banners/promo1.jpg', // 400% + 200FS
+  'banners/promo2.jpg', // +5% ежедневно
+  'banners/promo3.jpg'  // быстрый вывод
+];
+
+let promoTimerId = null;
+
+function startPromoSlider() {
+  if (!promoMain) return;
+
+  // каждый раз при вызове очищаем старый таймер
+  if (promoTimerId) {
+    clearInterval(promoTimerId);
+    promoTimerId = null;
+  }
+
+  if (window.innerWidth > 768) {
+    // ===== ДЕСКТОП =====
+    // слева всегда первый баннер
+    promoMain.style.backgroundImage = `url('${promoImages[0]}')`;
+
+    // справа крутим только второй и третий
+    let idx = 0; // 0 или 1 среди promoSideBanners
+    promoSideBanners.forEach((b, i) => {
+      b.classList.toggle('active', i === idx);
     });
 
-    if (promoTimer) clearInterval(promoTimer);
-    promoTimer = setInterval(() => {
-      promoIndex = (promoIndex + 1) % promoBanners.length;
-      promoBanners.forEach((banner, i) => {
-        banner.classList.toggle('active', i === promoIndex);
+    promoTimerId = setInterval(() => {
+      idx = (idx + 1) % promoSideBanners.length;
+      promoSideBanners.forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
       });
     }, 3000);
   } else {
-    // десктоп: показываем все баннеры, карусель не нужна
-    if (promoTimer) {
-      clearInterval(promoTimer);
-      promoTimer = null;
-    }
-    promoBanners.forEach(banner => {
-      banner.classList.remove('active'); // на десктопе стили не завязаны на active
-    });
+    // ===== МОБИЛКА =====
+    // показываем только .promo-main и крутим все три промо
+    let mobileIdx = 0;
+    promoMain.style.backgroundImage = `url('${promoImages[mobileIdx]}')`;
+
+    promoTimerId = setInterval(() => {
+      mobileIdx = (mobileIdx + 1) % promoImages.length;
+      promoMain.style.backgroundImage = `url('${promoImages[mobileIdx]}')`;
+    }, 3000);
   }
 }
 
 // первый запуск
-updateMobilePromo();
+startPromoSlider();
 
-// перестраиваем при ресайзе (смена ориентации / ширины)
-window.addEventListener('resize', () => {
-  updateMobilePromo();
-});
+// пересоздаём слайдер при изменении ширины (поворот экрана и т.п.)
+window.addEventListener('resize', startPromoSlider);
+
 
   </script>
 </body>
 </html>
+
 
