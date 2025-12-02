@@ -36,19 +36,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
+  bottom: 0;                 /* растягивается до низа */
   width: 260px;
   background: #111318;
   border-right: 1px solid #20232a;
   padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
-  z-index: 50;                 /* было 20 — теперь поверх топ-бара */
+  z-index: 50;               /* поверх топ-бара */
   transition: left .2s ease-out;
 
-  overflow-y: auto;            /* скролл содержимого */
-  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;          /* скролл содержимого */
+  -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
 }
+
 
 
     .sidebar-top {
@@ -1105,18 +1106,21 @@
 
     /* ===== АДАПТИВ ===== */
     @media (max-width: 768px) {
-      .sidebar {
-        left: -260px;
-        top: 100px;
-        height: calc(100vh - 70px);
-      }
-      .sidebar.open { left: 0; }
+  .sidebar {
+    left: -260px;     /* спрятан за экраном */
+    top: 100;           /* перекрывает логотип/баланс/бургер */
+    bottom: 0;        /* до самого низа */
+    height: auto;     /* убираем 100vh */
+  }
+  .sidebar.open {
+    left: 0;
+  }
 
-      .top-bar {
-        left: 0;
-        top: 95px;
-        padding: 0 10px;
-      }
+  .top-bar {
+    left: 0;
+    top: 95px;        /* как у тебя было для отступа от верха */
+    padding: 0 10px;
+  }
 
       .logo-wrapper img { height: 48px; }
 
@@ -1990,6 +1994,7 @@
   </script>
 </body>
 </html>
+
 
 
 
