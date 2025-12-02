@@ -36,18 +36,18 @@
       position: fixed;
       top: 0;
       left: 0;
-      bottom: 0;                 /* растягивается до низа */
+      bottom: 0;
       width: 260px;
       background: #111318;
       border-right: 1px solid #20232a;
       padding: 14px 14px 16px;
       display: flex;
       flex-direction: column;
-      z-index: 50;               /* поверх топ-бара */
+      z-index: 50;
       transition: left .2s ease-out;
 
-      overflow-y: auto;          /* скролл содержимого */
-      -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .sidebar-top {
@@ -465,7 +465,7 @@
     .wallet-overlay.open { display: flex; }
 
     .wallet-modal {
-      width: min(600px, 100vw - 32px);   /* стало заметно уже */
+      width: min(600px, 100vw - 32px);
       max-height: min(520px, 100vh - 60px);
       background: #15171f;
       border-radius: 18px;
@@ -1141,6 +1141,149 @@
       display: block;
     }
 
+    /* ===== КАРТОЧКИ ИГР (СЛОТЫ) ===== */
+
+    .games-section {
+      max-width: 1400px;
+      margin: 32px auto 0;
+    }
+
+    .games-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .games-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .games-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .games-filter {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .games-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background .15s, border-color .15s, transform .12s;
+    }
+
+    .games-arrow:hover {
+      background: #191b23;
+      border-color: rgba(255,216,74,.7);
+      transform: translateY(-1px);
+    }
+
+    .games-row {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scroll-behavior: smooth;
+    }
+
+    .games-row::-webkit-scrollbar {
+      height: 6px;
+    }
+    .games-row::-webkit-scrollbar-track {
+      background: #0b0c10;
+    }
+    .games-row::-webkit-scrollbar-thumb {
+      background: #262932;
+      border-radius: 999px;
+    }
+
+    .game-card {
+      flex: 0 0 210px;
+      border-radius: 18px;
+      background: #101117;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      cursor: pointer;
+      transition: transform .15s ease-out, box-shadow .15s ease-out, filter .15s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
+      filter: brightness(1.05);
+    }
+
+    .game-thumb {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #171923;
+    }
+
+    .game-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .game-info {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 14px 12px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.1));
+    }
+
+    .game-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .game-provider {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #c5c9d6;
+    }
+
+    .game-badge {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     /* ===== АДАПТИВ ===== */
     @media (max-width: 1024px) {
       .page-content {
@@ -1151,10 +1294,10 @@
 
     @media (max-width: 768px) {
       .sidebar {
-        left: -260px;     /* спрятан за экраном */
-        top: 100;         /* перекрывает логотип/баланс/бургер */
-        bottom: 0;        /* до самого низа */
-        height: auto;     /* убираем 100vh */
+        left: -260px;
+        top: 100;
+        bottom: 0;
+        height: auto;
       }
       .sidebar.open {
         left: 0;
@@ -1162,7 +1305,7 @@
 
       .top-bar {
         left: 0;
-        top: 10px;        /* как у тебя было для отступа от верха */
+        top: 10px;
         padding: 0 10px;
       }
 
@@ -1222,7 +1365,15 @@
       }
 
       .promo-side {
-        display: none;  /* на телефоне правый блок прячем */
+        display: none;
+      }
+
+      .games-section {
+        margin-top: 24px;
+      }
+
+      .game-card {
+        flex: 0 0 160px;
       }
     }
 
@@ -1234,7 +1385,6 @@
       margin-right: 6px;
     }
 
-    /* смещаем "Казино" правее */
     .sidebar-top .mode-switch {
       flex: 1;
     }
@@ -1255,10 +1405,10 @@
 
     @media (max-width: 768px) {
       .balance-panel {
-        width: 240px !important;    /* уже панель */
-        right: 12px !important;     /* основной контроллер отступа справа */
-        left: auto !important;      /* отключить позиционирование по left */
-        top: 110px !important;      /* небольшое смещение вниз */
+        width: 240px !important;
+        right: 12px !important;
+        left: auto !important;
+        top: 110px !important;
       }
     }
   </style>
@@ -1419,6 +1569,84 @@
             alt="Выводи быстро и без комиссий"
           >
         </div>
+      </div>
+    </section>
+
+    <!-- СЛОТЫ / КАРТОЧКИ ИГР -->
+    <section class="games-section">
+      <div class="games-header">
+        <h2 class="games-title">Слоты</h2>
+        <div class="games-controls">
+          <button class="games-filter">
+            Все <span>▾</span>
+          </button>
+          <button class="games-arrow" id="gamesPrev">‹</button>
+          <button class="games-arrow" id="gamesNext">›</button>
+        </div>
+      </div>
+
+      <div class="games-row" id="gamesRow">
+        <!-- Карточка 1 -->
+        <article class="game-card">
+          <div class="game-badge">Популярная</div>
+          <div class="game-thumb">
+            <img src="games/game1.jpg" alt="Joker Stoker">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Joker Stoker</div>
+            <div class="game-provider">Endorphina</div>
+          </div>
+        </article>
+
+        <!-- Карточка 2 -->
+        <article class="game-card">
+          <div class="game-badge">Новинка</div>
+          <div class="game-thumb">
+            <img src="games/game2.jpg" alt="Gates of Olympus">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Gates of Olympus</div>
+            <div class="game-provider">Pragmatic Play</div>
+          </div>
+        </article>
+
+        <!-- Карточка 3 -->
+        <article class="game-card">
+          <div class="game-badge">Top</div>
+          <div class="game-thumb">
+            <img src="games/game3.jpg" alt="Baba Yaga Tales">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Baba Yaga Tales</div>
+            <div class="game-provider">Spinomenal</div>
+          </div>
+        </article>
+
+        <!-- Карточка 4 -->
+        <article class="game-card">
+          <div class="game-badge">Hot</div>
+          <div class="game-thumb">
+            <img src="games/game4.jpg" alt="3 Energy Crowns">
+          </div>
+          <div class="game-info">
+            <div class="game-title">3 Energy Crowns</div>
+            <div class="game-provider">Amigo Gaming</div>
+          </div>
+        </article>
+
+        <!-- Карточка 5 -->
+        <article class="game-card">
+          <div class="game-badge">Jackpot</div>
+          <div class="game-thumb">
+            <img src="games/game5.jpg" alt="Greedy Goblin">
+          </div>
+          <div class="game-info">
+            <div class="game-title">Greedy Goblin</div>
+            <div class="game-provider">Mascot</div>
+          </div>
+        </article>
+
+        <!-- Добавишь ещё сколько нужно по этому же шаблону -->
       </div>
     </section>
   </main>
@@ -1876,7 +2104,7 @@
     const sidebar = document.querySelector('.sidebar');
     const sidebarBackdrop = document.getElementById('sidebarBackdrop');
     const burgerToggle = document.getElementById('burgerToggle');
-    const sidebarBurgerBtn = document.querySelector('.sidebar .burger-btn'); // <- кнопка внутри сайдбара
+    const sidebarBurgerBtn = document.querySelector('.sidebar .burger-btn');
 
     const walletBtn = document.getElementById('walletBtn');
     const balanceOverlay = document.getElementById('balanceOverlay');
@@ -1910,7 +2138,6 @@
     const copyAddressBtn = document.getElementById('copyAddressBtn');
     const payAddress = document.getElementById('payAddress');
 
-    // withdraw elements
     const withdrawSelectBtn = document.getElementById('withdrawSelectBtn');
     const withdrawDropdown = document.getElementById('withdrawDropdown');
     const withdrawCoinImg = document.getElementById('withdrawCoinImg');
@@ -1920,7 +2147,6 @@
     const withdrawBalanceAmount = document.getElementById('withdrawBalanceAmount');
     const withdrawBalanceCode = document.getElementById('withdrawBalanceCode');
 
-    // демонстрационные балансы
     const withdrawBalances = {
       USDTTRC20: 0,
       BTC: 0,
@@ -1935,7 +2161,6 @@
     burgerToggle.addEventListener('click', toggleSidebar);
     sidebarBackdrop.addEventListener('click', toggleSidebar);
 
-    // внутренняя кнопка "бургер" в самом сайдбаре — на телефоне закрывает меню
     if (sidebarBurgerBtn) {
       sidebarBurgerBtn.addEventListener('click', toggleSidebar);
     }
@@ -1945,12 +2170,10 @@
       e.stopPropagation();
 
       if (window.innerWidth > 768) {
-        /* Десктоп */
         const rect = walletBtn.getBoundingClientRect();
         balancePanel.style.left = rect.left + 'px';
         balancePanel.style.top = (rect.bottom + 8) + 'px';
       } else {
-        /* Мобилка — позиция контролируется CSS */
         balancePanel.style.left = 'auto';
         balancePanel.style.right = '12px';
         balancePanel.style.top = '110px';
@@ -2115,22 +2338,20 @@
       withdrawDropdown.classList.remove('open');
     });
 
-    // закрывать dropdown при клике вне
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.withdraw-select-wrapper')) {
         withdrawDropdown.classList.remove('open');
       }
     });
 
-    /* ===== ПРОМО-БАННЕРЫ (адаптивные, любой размер) ===== */
+    /* ===== ПРОМО-БАННЕРЫ (адаптивные) ===== */
     const promoMainImg = document.querySelector('.promo-main .promo-img');
     const promoSideImgs = document.querySelectorAll('.promo-side-img');
 
-    // можно менять пути и расширения как хочешь
     const promoSources = [
-      'banners/promo1.jpg', // 400% + 200FS
-      'banners/promo2.jpg', // +5% ежедневно
-      'banners/promo3.jpg'  // быстрый вывод
+      'banners/promo1.jpg',
+      'banners/promo2.jpg',
+      'banners/promo3.jpg'
     ];
 
     let promoTimerId = null;
@@ -2144,11 +2365,9 @@
       }
 
       if (window.innerWidth > 768) {
-        // ===== ДЕСКТОП =====
-        // слева всегда первый баннер
+        // десктоп: слева первый, справа крутятся два
         promoMainImg.src = promoSources[0];
 
-        // справа крутим только второй и третий
         let idx = 0;
         promoSideImgs.forEach((img, i) => {
           img.classList.toggle('active', i === idx);
@@ -2161,8 +2380,7 @@
           });
         }, 3000);
       } else {
-        // ===== МОБИЛКА =====
-        // показываем только основной баннер, крутим все три
+        // мобилка: только один баннер, крутятся все три
         let mobileIdx = 0;
         promoMainImg.src = promoSources[mobileIdx];
 
@@ -2175,11 +2393,25 @@
       }
     }
 
-    // первый запуск
     startPromoSlider();
-
-    // пересоздаём слайдер при изменении ширины
     window.addEventListener('resize', startPromoSlider);
+
+    /* ===== СТРЕЛКИ ДЛЯ СЛОТОВ ===== */
+    const gamesRow = document.getElementById('gamesRow');
+    const gamesPrev = document.getElementById('gamesPrev');
+    const gamesNext = document.getElementById('gamesNext');
+
+    if (gamesRow && gamesPrev && gamesNext) {
+      const step = 260; // примерно ширина карточки + отступ
+
+      gamesPrev.addEventListener('click', () => {
+        gamesRow.scrollBy({ left: -step, behavior: 'smooth' });
+      });
+
+      gamesNext.addEventListener('click', () => {
+        gamesRow.scrollBy({ left: step, behavior: 'smooth' });
+      });
+    }
   </script>
 </body>
 </html>
