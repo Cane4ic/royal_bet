@@ -464,7 +464,6 @@
     }
     .wallet-overlay.open { display: flex; }
 
-    /* было: width: min(820px, 100vw - 32px); ... */
     .wallet-modal {
       width: min(600px, 100vw - 32px);   /* стало заметно уже */
       max-height: min(520px, 100vh - 60px);
@@ -475,8 +474,6 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-    }
-
     }
 
     .wallet-modal-header {
@@ -1101,92 +1098,61 @@
       background: #2a2d39;
       color: #a8ffb6;
     }
+
+    /* ===== ОСНОВНОЙ КОНТЕНТ + ПРОМО ===== */
+
     .page-content {
-  margin-left: 260px;
-  padding: 120px 40px 40px;
-}
+      margin-left: 260px;
+      padding: 120px 40px 40px;
+    }
 
-.promo-section {
-  max-width: 1400px;
-  margin: 0 auto;
-}
+    .promo-section {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-.promo-layout {
-  display: flex;
-  gap: 24px;
-  align-items: stretch;
-}
+    .promo-layout {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
 
-.promo-banner {
-  border-radius: 20px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
-}
+    .promo-main {
+      flex: 2;
+    }
 
-/* большой баннер слева */
-.promo-main {
-  flex: 2;
-  min-height: 320px;
-}
+    .promo-side {
+      flex: 1;
+    }
 
-/* маленький баннер справа */
-.promo-side {
-  flex: 1;
-  position: relative;
-  min-height: 320px;
-}
+    .promo-img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      display: block;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
 
-.promo-side-banner {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .4s ease-out;
-}
+    .promo-side-img {
+      display: none;
+    }
 
-.promo-side-banner.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* адаптив */
-@media (max-width: 1024px) {
-  .page-content {
-    margin-left: 260px;
-    padding: 100px 20px 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-content {
-    margin-left: 0;
-    padding: 90px 16px 24px;
-  }
-
-  .promo-layout {
-    flex-direction: column;
-  }
-
-  .promo-main {
-    flex: none;
-    width: 100%;
-    min-height: 220px;
-  }
-
-  /* на телефоне правый мини-баннер не показываем,
-     оставляем только один большой */
-  .promo-side {
-    display: none;
-  }
-}
+    .promo-side-img.active {
+      display: block;
+    }
 
     /* ===== АДАПТИВ ===== */
+    @media (max-width: 1024px) {
+      .page-content {
+        margin-left: 260px;
+        padding: 100px 20px 24px;
+      }
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         left: -260px;     /* спрятан за экраном */
-        top: 100;           /* перекрывает логотип/баланс/бургер */
+        top: 100;         /* перекрывает логотип/баланс/бургер */
         bottom: 0;        /* до самого низа */
         height: auto;     /* убираем 100vh */
       }
@@ -1244,6 +1210,19 @@
 
       .pay-warnings {
         grid-template-columns: 1fr;
+      }
+
+      .page-content {
+        margin-left: 0;
+        padding: 90px 16px 24px;
+      }
+
+      .promo-layout {
+        flex-direction: column;
+      }
+
+      .promo-side {
+        display: none;  /* на телефоне правый блок прячем */
       }
     }
 
@@ -1413,27 +1392,36 @@
       </div>
     </div>
   </header>
-<main class="page-content">
-  <section class="promo-section">
-    <div class="promo-layout">
-      <!-- большой баннер слева -->
-      <div class="promo-main promo-banner"
-           style="background-image:url('banners/promo1.jpg');">
-      </div>
 
-      <!-- маленький баннер справа, будет меняться -->
-      <div class="promo-side">
-        <div class="promo-side-banner promo-banner active"
-             style="background-image:url('banners/promo2.jpg');">
+  <!-- ПРОМО-БЛОК -->
+  <main class="page-content">
+    <section class="promo-section">
+      <div class="promo-layout">
+        <!-- большой баннер слева -->
+        <div class="promo-main">
+          <img
+            class="promo-img"
+            src="banners/promo1.jpg"
+            alt="Получи 400% и +200FS к депозиту"
+          >
         </div>
-        <div class="promo-side-banner promo-banner"
-             style="background-image:url('banners/promo3.jpg');">
+
+        <!-- маленький баннер справа, будет меняться -->
+        <div class="promo-side">
+          <img
+            class="promo-img promo-side-img active"
+            src="banners/promo2.jpg"
+            alt="+5% к депозиту ежедневно"
+          >
+          <img
+            class="promo-img promo-side-img"
+            src="banners/promo3.jpg"
+            alt="Выводи быстро и без комиссий"
+          >
         </div>
       </div>
-    </div>
-  </section>
-</main>
-
+    </section>
+  </main>
 
   <!-- BALANCE POPUP -->
   <div class="balance-overlay" id="balanceOverlay">
@@ -2133,66 +2121,65 @@
         withdrawDropdown.classList.remove('open');
       }
     });
-   /* ===== ПРОМО-БАННЕРЫ ===== */
-const promoMain = document.querySelector('.promo-main');
-const promoSideBanners = document.querySelectorAll('.promo-side-banner');
 
-const promoImages = [
-  'banners/promo1.jpg', // 400% + 200FS
-  'banners/promo2.jpg', // +5% ежедневно
-  'banners/promo3.jpg'  // быстрый вывод
-];
+    /* ===== ПРОМО-БАННЕРЫ (адаптивные, любой размер) ===== */
+    const promoMainImg = document.querySelector('.promo-main .promo-img');
+    const promoSideImgs = document.querySelectorAll('.promo-side-img');
 
-let promoTimerId = null;
+    // можно менять пути и расширения как хочешь
+    const promoSources = [
+      'banners/promo1.jpg', // 400% + 200FS
+      'banners/promo2.jpg', // +5% ежедневно
+      'banners/promo3.jpg'  // быстрый вывод
+    ];
 
-function startPromoSlider() {
-  if (!promoMain) return;
+    let promoTimerId = null;
 
-  // каждый раз при вызове очищаем старый таймер
-  if (promoTimerId) {
-    clearInterval(promoTimerId);
-    promoTimerId = null;
-  }
+    function startPromoSlider() {
+      if (!promoMainImg) return;
 
-  if (window.innerWidth > 768) {
-    // ===== ДЕСКТОП =====
-    // слева всегда первый баннер
-    promoMain.style.backgroundImage = `url('${promoImages[0]}')`;
+      if (promoTimerId) {
+        clearInterval(promoTimerId);
+        promoTimerId = null;
+      }
 
-    // справа крутим только второй и третий
-    let idx = 0; // 0 или 1 среди promoSideBanners
-    promoSideBanners.forEach((b, i) => {
-      b.classList.toggle('active', i === idx);
-    });
+      if (window.innerWidth > 768) {
+        // ===== ДЕСКТОП =====
+        // слева всегда первый баннер
+        promoMainImg.src = promoSources[0];
 
-    promoTimerId = setInterval(() => {
-      idx = (idx + 1) % promoSideBanners.length;
-      promoSideBanners.forEach((b, i) => {
-        b.classList.toggle('active', i === idx);
-      });
-    }, 3000);
-  } else {
-    // ===== МОБИЛКА =====
-    // показываем только .promo-main и крутим все три промо
-    let mobileIdx = 0;
-    promoMain.style.backgroundImage = `url('${promoImages[mobileIdx]}')`;
+        // справа крутим только второй и третий
+        let idx = 0;
+        promoSideImgs.forEach((img, i) => {
+          img.classList.toggle('active', i === idx);
+        });
 
-    promoTimerId = setInterval(() => {
-      mobileIdx = (mobileIdx + 1) % promoImages.length;
-      promoMain.style.backgroundImage = `url('${promoImages[mobileIdx]}')`;
-    }, 3000);
-  }
-}
+        promoTimerId = setInterval(() => {
+          idx = (idx + 1) % promoSideImgs.length;
+          promoSideImgs.forEach((img, i) => {
+            img.classList.toggle('active', i === idx);
+          });
+        }, 3000);
+      } else {
+        // ===== МОБИЛКА =====
+        // показываем только основной баннер, крутим все три
+        let mobileIdx = 0;
+        promoMainImg.src = promoSources[mobileIdx];
 
-// первый запуск
-startPromoSlider();
+        promoSideImgs.forEach(img => img.classList.remove('active'));
 
-// пересоздаём слайдер при изменении ширины (поворот экрана и т.п.)
-window.addEventListener('resize', startPromoSlider);
+        promoTimerId = setInterval(() => {
+          mobileIdx = (mobileIdx + 1) % promoSources.length;
+          promoMainImg.src = promoSources[mobileIdx];
+        }, 3000);
+      }
+    }
 
+    // первый запуск
+    startPromoSlider();
 
+    // пересоздаём слайдер при изменении ширины
+    window.addEventListener('resize', startPromoSlider);
   </script>
 </body>
 </html>
-
-
