@@ -1146,7 +1146,19 @@
 
       .mobile-burger { display: inline-flex; }
 
-      .sidebar-top .burger-btn { display: none; }
+      .sidebar-close-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-close-btn {
+    display: inline-flex;
+    margin-right: 6px;
+  }
+
+  .sidebar .mode-switch button {
+    margin-left: auto;   /* Казино уходит правее */
+  } .burger-btn { display: none; }
 
       .balance-panel {
         width: calc(100vw - 24px);
@@ -2012,6 +2024,7 @@
   </script>
 </body>
 </html>
+
 
 
 
