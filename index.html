@@ -1174,6 +1174,14 @@
     }
 
     .hidden { display: none !important; }
+	  @media (max-width: 768px) {
+  .balance-panel {
+    width: 240px !important;    /* уже панель */
+    right: 12px !important;     /* основной контроллер отступа справа */
+    left: auto !important;      /* отключить позиционирование по left */
+    top: 110px !important;      /* небольшое смещение вниз */
+  }
+}
   </style>
 </head>
 <body>
@@ -1822,13 +1830,23 @@
 
     // BALANCE PANEL
     walletBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const rect = walletBtn.getBoundingClientRect();
-      balancePanel.style.left = rect.left + 'px';
-      balancePanel.style.top = (rect.bottom + 8) + 'px';
-      balanceOverlay.classList.toggle('open');
-      currencyDropdown.classList.remove('open');
-    });
+  e.stopPropagation();
+
+  if (window.innerWidth > 768) {
+    /* Десктоп */
+    const rect = walletBtn.getBoundingClientRect();
+    balancePanel.style.left = rect.left + 'px';
+    balancePanel.style.top = (rect.bottom + 8) + 'px';
+  } else {
+    /* Мобилка — позиция контролируется CSS */
+    balancePanel.style.left = 'auto';
+    balancePanel.style.right = '12px';
+    balancePanel.style.top = '110px';
+  }
+
+  balanceOverlay.classList.toggle('open');
+  currencyDropdown.classList.remove('open');
+});
 
     balanceOverlay.addEventListener('click', (e) => {
       if (!e.target.closest('.balance-panel')) {
@@ -1994,6 +2012,7 @@
   </script>
 </body>
 </html>
+
 
 
 
