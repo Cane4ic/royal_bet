@@ -33,24 +33,22 @@
 
     /* ----------- САЙДБАР ----------- */
     .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;                 /* растягивается до низа */
-  width: 260px;
-  background: #111318;
-  border-right: 1px solid #20232a;
-  padding: 14px 14px 16px;
-  display: flex;
-  flex-direction: column;
-  z-index: 50;               /* поверх топ-бара */
-  transition: left .2s ease-out;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;                 /* растягивается до низа */
+      width: 260px;
+      background: #111318;
+      border-right: 1px solid #20232a;
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;               /* поверх топ-бара */
+      transition: left .2s ease-out;
 
-  overflow-y: auto;          /* скролл содержимого */
-  -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
-}
-
-
+      overflow-y: auto;          /* скролл содержимого */
+      -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
+    }
 
     .sidebar-top {
       display: flex;
@@ -467,17 +465,17 @@
     .wallet-overlay.open { display: flex; }
 
     /* было: width: min(820px, 100vw - 32px); ... */
-.wallet-modal {
-  width: min(600px, 100vw - 32px);   /* стало заметно уже */
-  max-height: min(520px, 100vh - 60px);
-  background: #15171f;
-  border-radius: 18px;
-  padding: 16px 18px 18px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.85);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+    .wallet-modal {
+      width: min(600px, 100vw - 32px);   /* стало заметно уже */
+      max-height: min(520px, 100vh - 60px);
+      background: #15171f;
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
     }
 
@@ -1106,21 +1104,21 @@
 
     /* ===== АДАПТИВ ===== */
     @media (max-width: 768px) {
-  .sidebar {
-    left: -260px;     /* спрятан за экраном */
-    top: 100;           /* перекрывает логотип/баланс/бургер */
-    bottom: 0;        /* до самого низа */
-    height: auto;     /* убираем 100vh */
-  }
-  .sidebar.open {
-    left: 0;
-  }
+      .sidebar {
+        left: -260px;     /* спрятан за экраном */
+        top: 100;           /* перекрывает логотип/баланс/бургер */
+        bottom: 0;        /* до самого низа */
+        height: auto;     /* убираем 100vh */
+      }
+      .sidebar.open {
+        left: 0;
+      }
 
-  .top-bar {
-    left: 0;
-    top: 10px;        /* как у тебя было для отступа от верха */
-    padding: 0 10px;
-  }
+      .top-bar {
+        left: 0;
+        top: 10px;        /* как у тебя было для отступа от верха */
+        padding: 0 10px;
+      }
 
       .logo-wrapper img { height: 48px; }
 
@@ -1146,19 +1144,9 @@
 
       .mobile-burger { display: inline-flex; }
 
-      .sidebar-close-btn {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .sidebar-close-btn {
-    display: inline-flex;
-    margin-right: 6px;
-  }
-
-  .sidebar .mode-switch button {
-    margin-left: auto;   /* Казино уходит правее */
-  } .burger-btn { display: none; }
+      .sidebar-top .burger-btn {
+        display: none;
+      }
 
       .balance-panel {
         width: calc(100vw - 24px);
@@ -1179,6 +1167,25 @@
       }
     }
 
+    /* бургер внутри sidebar — виден на мобилке */
+    .sidebar-top .burger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 6px;
+    }
+
+    /* смещаем "Казино" правее */
+    .sidebar-top .mode-switch {
+      flex: 1;
+    }
+
+    .sidebar-top .mode-switch button {
+      width: 100%;
+      text-align: left;
+      padding-left: 8px;
+    }
+
     @media (max-width: 480px) {
       .crypto-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1186,20 +1193,18 @@
     }
 
     .hidden { display: none !important; }
-	  @media (max-width: 768px) {
-  .balance-panel {
-    width: 240px !important;    /* уже панель */
-    right: 12px !important;     /* основной контроллер отступа справа */
-    left: auto !important;      /* отключить позиционирование по left */
-    top: 110px !important;      /* небольшое смещение вниз */
-  }
-}
+
+    @media (max-width: 768px) {
+      .balance-panel {
+        width: 240px !important;    /* уже панель */
+        right: 12px !important;     /* основной контроллер отступа справа */
+        left: auto !important;      /* отключить позиционирование по left */
+        top: 110px !important;      /* небольшое смещение вниз */
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Сайдбар, топ-бар и панель баланса – как раньше -->
-  <!-- ... (можешь оставить свои версии, я не менял структуру) ... -->
-
   <!-- САЙДБАР -->
   <aside class="sidebar">
     <div class="sidebar-top">
@@ -1425,7 +1430,7 @@
                   </div>
                 </div>
               </div>
-		<div class="crypto-card"
+              <div class="crypto-card"
                    data-network="BEP20"
                    data-min="15.00"
                    data-symbol="USDTBEP20">
@@ -1452,7 +1457,7 @@
                   </div>
                 </div>
               </div>
-		<div class="crypto-card"
+              <div class="crypto-card"
                    data-network="TON"
                    data-min="15.00"
                    data-symbol="USDTTON">
@@ -1479,7 +1484,7 @@
                   </div>
                 </div>
               </div>
-		<div class="crypto-card"
+              <div class="crypto-card"
                    data-network="TON"
                    data-min="7.50"
                    data-symbol="TONCOIN">
@@ -1506,7 +1511,7 @@
                   </div>
                 </div>
               </div>
-		<div class="crypto-card"
+              <div class="crypto-card"
                    data-network="ETH"
                    data-min="0.075"
                    data-symbol="ETH">
@@ -1533,7 +1538,7 @@
                   </div>
                 </div>
               </div>
-		<div class="crypto-card"
+              <div class="crypto-card"
                    data-network="TRX"
                    data-min="15.00"
                    data-symbol="TRX">
@@ -1782,6 +1787,7 @@
     const sidebar = document.querySelector('.sidebar');
     const sidebarBackdrop = document.getElementById('sidebarBackdrop');
     const burgerToggle = document.getElementById('burgerToggle');
+    const sidebarBurgerBtn = document.querySelector('.sidebar .burger-btn'); // <- кнопка внутри сайдбара
 
     const walletBtn = document.getElementById('walletBtn');
     const balanceOverlay = document.getElementById('balanceOverlay');
@@ -1840,25 +1846,30 @@
     burgerToggle.addEventListener('click', toggleSidebar);
     sidebarBackdrop.addEventListener('click', toggleSidebar);
 
+    // внутренняя кнопка "бургер" в самом сайдбаре — на телефоне закрывает меню
+    if (sidebarBurgerBtn) {
+      sidebarBurgerBtn.addEventListener('click', toggleSidebar);
+    }
+
     // BALANCE PANEL
     walletBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
+      e.stopPropagation();
 
-  if (window.innerWidth > 768) {
-    /* Десктоп */
-    const rect = walletBtn.getBoundingClientRect();
-    balancePanel.style.left = rect.left + 'px';
-    balancePanel.style.top = (rect.bottom + 8) + 'px';
-  } else {
-    /* Мобилка — позиция контролируется CSS */
-    balancePanel.style.left = 'auto';
-    balancePanel.style.right = '12px';
-    balancePanel.style.top = '110px';
-  }
+      if (window.innerWidth > 768) {
+        /* Десктоп */
+        const rect = walletBtn.getBoundingClientRect();
+        balancePanel.style.left = rect.left + 'px';
+        balancePanel.style.top = (rect.bottom + 8) + 'px';
+      } else {
+        /* Мобилка — позиция контролируется CSS */
+        balancePanel.style.left = 'auto';
+        balancePanel.style.right = '12px';
+        balancePanel.style.top = '110px';
+      }
 
-  balanceOverlay.classList.toggle('open');
-  currencyDropdown.classList.remove('open');
-});
+      balanceOverlay.classList.toggle('open');
+      currencyDropdown.classList.remove('open');
+    });
 
     balanceOverlay.addEventListener('click', (e) => {
       if (!e.target.closest('.balance-panel')) {
@@ -2024,13 +2035,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
