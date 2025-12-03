@@ -1,0 +1,5368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Royal Bet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent-start: #ffd84a;
+      --accent-end: #ff9a2b;
+
+      --text-main: #e7e9ef;
+      --text-soft: #9aa0ac;
+
+      --font: 'Inter', sans-serif;
+      --menu-font-size: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      font-family: var(--font);
+      color: var(--text-main);
+    }
+
+    /* ----------- САЙДБАР ----------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      background: #111318;
+      border-right: 1px solid #20232a;
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transition: left .2s ease-out;
+
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .sidebar-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .burger-btn {
+      width: 40px;
+      height: 40px;
+      background: #1b1d23;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .mode-switch button {
+      padding: 7px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: none;
+      background: #191b23;
+      color: var(--text-main);
+      font-size: 15px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .menu-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      margin: 12px 8px 6px;
+    }
+
+    .menu-list { list-style: none; }
+    .menu-item { margin-bottom: 4px; }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: var(--menu-font-size);
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .16s, color .16s;
+    }
+
+    .menu-link:hover {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .menu-link.active {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .menu-icon img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .divider {
+      height: 1px;
+      background: #20232a;
+      margin: 14px 0 10px;
+    }
+
+    .sidebar-bottom { margin-top: auto; }
+
+    .bottom-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lang-btn {
+      width: 46px;
+      height: 38px;
+      background: #191b23;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .support-btn {
+      flex: 1;
+      height: 38px;
+      background: #191b23;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background .16s, color .16s;
+    }
+
+    .support-btn:hover {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      font-weight: 600;
+    }
+
+    .support-icon img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 15;
+      display: none;
+    }
+    .sidebar-backdrop.open { display: block; }
+
+    /* ---------- TOP BAR ---------- */
+    .top-bar {
+      position: fixed;
+      left: 260px;
+      right: 0;
+      top: 18px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 25;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-wrapper img {
+      height: 80px;
+      display: block;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .mobile-burger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: #fff;
+      font-size: 20px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .wallet {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-radius: 12px;
+      background: #111318;
+      border: 1px solid #262932;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+      font-size: 15px;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    .wallet-balance {
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .wallet-arrow {
+      margin-left: auto;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .wallet:hover { border-color: rgba(255, 216, 74, 0.8); }
+
+    .wallet-symbol {
+      font-size: 20px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .btn-deposit {
+      padding: 10px 22px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+      box-shadow: 0 10px 20px rgba(255, 182, 70, 0.4);
+      white-space: nowrap;
+      transition: transform .12s ease-out, box-shadow .12s ease-out;
+    }
+
+    .btn-deposit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(255, 182, 70, 0.6);
+    }
+
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #343840, #111318);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+      cursor: pointer;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-status {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ff3f9c;
+      box-shadow: 0 0 0 2px #111318;
+    }
+
+    /* ===== ВЫПАДАЮЩЕЕ ОКНО БАЛАНСА ===== */
+
+    .balance-overlay {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      display: none;
+      z-index: 30;
+    }
+    .balance-overlay.open { display: block; }
+
+    .balance-panel {
+      position: absolute;
+      width: 280px;
+      padding: 16px 16px 14px;
+      border-radius: 14px;
+      background: #14161e;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.85);
+      color: var(--text-main);
+      font-size: 14px;
+    }
+
+    .balance-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .balance-label {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .balance-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .balance-main-amount {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .currency-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: #191b23;
+      border: 1px solid #262932;
+      cursor: pointer;
+      font-size: 13px;
+      min-width: 110px;
+    }
+
+    .currency-code { font-weight: 500; }
+    .select-arrow {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .currency-dropdown {
+      margin-top: 6px;
+      border-radius: 10px;
+      background: #191b23;
+      border: 1px solid #262932;
+      overflow: hidden;
+      display: none;
+    }
+    .currency-dropdown.open { display: block; }
+
+    .currency-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .currency-item:hover { background: #23252f; }
+
+    .bonus-card {
+      margin-top: 10px;
+      border-radius: 10px;
+      background: #191b23;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+    }
+
+    .bonus-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .bonus-arrow {
+      font-size: 14px;
+      color: #4b4f5a;
+    }
+
+    .bonus-amount {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .balance-wallet-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+    }
+
+    /* ===== МОДАЛКА КОШЕЛЬКА / ВАЛЮТЫ ===== */
+
+    .wallet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+    }
+    .wallet-overlay.open { display: flex; }
+
+    .wallet-modal {
+      width: min(600px, 100vw - 32px);
+      max-height: min(520px, 100vh - 60px);
+      background: #15171f;
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .wallet-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .wallet-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wallet-back-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-soft);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 999px;
+      transition: background .12s;
+    }
+
+    .wallet-back-btn:hover {
+      background: #222531;
+    }
+
+    .wallet-back-btn span:first-child {
+      font-size: 16px;
+      transform: translateY(1px);
+    }
+
+    .wallet-modal-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .wallet-modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: none;
+      background: #242633;
+      color: #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Табы */
+    .wallet-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      background: #101117;
+      border-radius: 10px;
+      padding: 2px;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+
+    .wallet-tab {
+      border: none;
+      padding: 7px 0;
+      border-radius: 8px;
+      background: #181a21;
+      color: #9da2af;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .12s, color .12s, box-shadow .12s;
+    }
+
+    .wallet-tab.active {
+      background: #2b2d36;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 0 0 1px #414552;
+    }
+
+    .wallet-banner {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      background: #101117;
+      height: 90px;
+    }
+
+    .wallet-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .wallet-modal-body {
+      overflow-y: auto;
+      padding-right: 4px;
+      flex: 1;
+    }
+
+    .wallet-tab-panel { display: none; }
+    .wallet-tab-panel.active { display: block; }
+
+    /* === ДЕПОЗИТ: выбор крипты === */
+
+    .wallet-deposit-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+
+    .crypto-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .crypto-card {
+      background: #191b23;
+      border-radius: 12px;
+      padding: 8px 8px 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform .12s ease-out, box-shadow .12s ease-out, border .12s;
+      border: 1px solid transparent;
+    }
+
+    .crypto-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.7);
+      border-color: rgba(255, 216, 74, 0.7);
+    }
+
+    .crypto-card-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .crypto-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .crypto-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .crypto-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .crypto-icons { display: flex; justify-content: flex-end; }
+
+    .crypto-icon-wrap {
+      position: relative;
+      width: 40px;
+      height: 40px;
+    }
+
+    .crypto-coin {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+    }
+
+    .crypto-coin img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .crypto-network {
+      position: absolute;
+      right: -3px;
+      bottom: -3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid #15171f;
+      overflow: hidden;
+      background: #101117;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.7);
+    }
+
+    .crypto-network img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .crypto-bottom {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .crypto-bonus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #101117;
+      font-size: 10px;
+      color: #d5d9e4;
+    }
+
+    .crypto-bonus-pill img {
+      width: 11px;
+      height: 11px;
+      display: block;
+    }
+
+    /* === ДЕПОЗИТ: шаг 2 (платёж) === */
+
+    .deposit-payment {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .deposit-payment.active { display: flex; }
+
+    .pay-row {
+      background: #191b23;
+      border-radius: 12px;
+      padding: 9px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .pay-row-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pay-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #101117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .pay-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pay-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pay-label {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .pay-value {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .pay-value-address {
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .pay-row-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pay-pill-btn {
+      border: none;
+      border-radius: 9px;
+      padding: 6px 9px;
+      background: #232634;
+      color: var(--text-main);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .pay-warnings {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .pay-warning-card {
+      background: #3a2f14;
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-size: 11px;
+      color: #f7e0a2;
+      display: flex;
+      gap: 6px;
+    }
+
+    .pay-warning-icon {
+      font-size: 16px;
+    }
+
+    .bonus-toggle-card {
+      margin-top: 2px;
+      background: linear-gradient(135deg, #14161f, #101117);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .bonus-toggle-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 13px;
+    }
+
+    .bonus-toggle-text small {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 22px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #303342;
+      transition: .2s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    .switch input:checked + .slider {
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    }
+    .switch input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    /* === ВЫВОД криптовалютой === */
+
+    .withdraw-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .withdraw-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .withdraw-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .withdraw-balance {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .withdraw-balance span {
+      font-weight: 500;
+      color: #ffffff;
+    }
+
+    .withdraw-select-wrapper {
+      position: relative;
+    }
+
+    .withdraw-select {
+      width: 100%;
+      border-radius: 10px;
+      border: none;
+      background: #191b23;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 13px;
+    }
+
+    .withdraw-select-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .withdraw-select-icon-wrap {
+      position: relative;
+      width: 26px;
+      height: 26px;
+    }
+
+    .withdraw-coin {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .withdraw-coin img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .withdraw-network {
+      position: absolute;
+      right: -3px;
+      bottom: -3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid #191b23;
+      overflow: hidden;
+      background: #101117;
+    }
+
+    .withdraw-network img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .withdraw-select-main {
+      font-weight: 500;
+    }
+
+    .withdraw-select-arrow {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .withdraw-dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-top: 4px;
+      border-radius: 10px;
+      background: #191b23;
+      border: 1px solid #262932;
+      overflow: hidden;
+      display: none;
+      z-index: 5;
+    }
+
+    .withdraw-dropdown.open { display: block; }
+
+    .withdraw-option {
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .withdraw-option:hover {
+      background: #222531;
+    }
+
+    .withdraw-option-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .withdraw-option-main {
+      font-weight: 500;
+    }
+
+    .withdraw-option-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .withdraw-row {
+      background: #191b23;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 13px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+    }
+
+    .withdraw-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    .withdraw-input::placeholder {
+      color: #6d7280;
+    }
+
+    .withdraw-min {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .withdraw-confirm {
+      margin-top: 14px;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+      color: #111;
+    }
+
+    /* === ИСТОРИЯ === */
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .history-item {
+      background: #191b23;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .h-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .h-type { font-weight: 600; }
+
+    .h-meta {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .h-amount {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .h-status {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #2a2d39;
+      color: #a8ffb6;
+    }
+
+    /* ===== ОСНОВНОЙ КОНТЕНТ + ПРОМО ===== */
+
+    .page-content {
+      margin-left: 260px;
+      padding: 120px 40px 40px;
+    }
+
+    .promo-section {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .promo-layout {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .promo-main {
+      flex: 2;
+    }
+
+    .promo-side {
+      flex: 1;
+    }
+
+    .promo-img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      display: block;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
+
+    .promo-side-img {
+      display: none;
+    }
+
+    .promo-side-img.active {
+      display: block;
+    }
+
+    /* ===== КАРТОЧКИ ИГР (СЛОТЫ) ===== */
+
+    .games-section {
+      max-width: 1400px;
+      margin: 32px auto 0;
+    }
+
+    .games-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .games-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .games-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .games-filter {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: var(--text-main);
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .games-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #262932;
+      background: #111318;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background .15s, border-color .15s, transform .12s;
+    }
+
+    .games-arrow:hover {
+      background: #191b23;
+      border-color: rgba(255,216,74,.7);
+      transform: translateY(-1px);
+    }
+
+    .games-row {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scroll-behavior: smooth;
+    }
+
+    .games-row::-webkit-scrollbar {
+      height: 6px;
+    }
+    .games-row::-webkit-scrollbar-track {
+      background: #0b0c10;
+    }
+    .games-row::-webkit-scrollbar-thumb {
+      background: #262932;
+      border-radius: 999px;
+    }
+
+    .game-card {
+      flex: 0 0 210px;
+      border-radius: 18px;
+      background: #101117;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      cursor: pointer;
+      transition: transform .15s ease-out, box-shadow .15s ease-out, filter .15s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
+      filter: brightness(1.05);
+    }
+
+    .game-thumb {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #171923;
+    }
+
+    .game-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .game-info {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 14px 12px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.1));
+    }
+
+    .game-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .game-provider {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #c5c9d6;
+    }
+
+    .game-badge {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 1024px) {
+      .page-content {
+        margin-left: 260px;
+        padding: 100px 20px 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        left: -260px;
+        top: 100;
+        bottom: 0;
+        height: auto;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+
+      .top-bar {
+        left: 0;
+        top: 10px;
+        padding: 0 10px;
+      }
+
+      .logo-wrapper img { height: 48px; }
+
+      .top-bar-right { gap: 8px; }
+
+      .wallet {
+        padding: 7px 10px;
+        font-size: 14px;
+        min-width: 110px;
+      }
+
+      .wallet-symbol { font-size: 18px; }
+
+      .btn-deposit {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+
+      .profile-avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .mobile-burger { display: inline-flex; }
+
+      .sidebar-top .burger-btn {
+        display: none;
+      }
+
+      .balance-panel {
+        width: calc(100vw - 24px);
+        max-width: 320px;
+      }
+
+      .wallet-modal {
+        width: calc(100vw - 24px);
+        max-height: calc(100vh - 80px);
+      }
+
+      .crypto-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .pay-warnings {
+        grid-template-columns: 1fr;
+      }
+
+      .page-content {
+        margin-left: 0;
+        padding: 90px 16px 24px;
+      }
+
+      .promo-layout {
+        flex-direction: column;
+      }
+
+      .promo-side {
+        display: none;
+      }
+
+      .games-section {
+        margin-top: 24px;
+      }
+
+      .game-card {
+        flex: 0 0 160px;
+      }
+    }
+
+    /* бургер внутри sidebar — виден на мобилке */
+    .sidebar-top .burger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 6px;
+    }
+
+    .sidebar-top .mode-switch {
+      flex: 1;
+    }
+
+    .sidebar-top .mode-switch button {
+      width: 100%;
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .crypto-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 768px) {
+      .balance-panel {
+        width: 240px !important;
+        right: 12px !important;
+        left: auto !important;
+        top: 110px !important;
+      }
+    }
+    /* ====== СТРАНИЦА ПРОФИЛЯ (ЛИЧНЫЙ КАБИНЕТ) ====== */
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.profile-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.profile-tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: #101118;
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.profile-tab {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-soft);
+}
+
+.profile-tab.active {
+  background: #e5ff6a;
+  color: #111;
+  font-weight: 600;
+}
+
+.profile-main-card {
+  background: #12141a;
+  border-radius: 16px;
+  border: 1px solid #252733;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile-main-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-avatar-big {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #3c7c1f, #111318);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-avatar-big img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.profile-id {
+  font-size: 13px;
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-id-btn {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  background: #1c1f28;
+  color: var(--text-soft);
+}
+
+.copy-id-btn:hover {
+  background: #252938;
+  color: #fff;
+}
+
+.profile-form-card {
+  background: #12141a;
+  border-radius: 16px;
+  border: 1px solid #252733;
+  padding: 20px;
+}
+
+.profile-form-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.form-label {
+  color: var(--text-soft);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #252733;
+  background: #151821;
+  color: var(--text-main);
+  padding: 9px 10px;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: rgba(255, 216, 74, 0.9);
+}
+
+.form-input::placeholder {
+  color: #626674;
+}
+
+.form-row-full {
+  grid-column: 1 / -1;
+}
+
+.profile-save-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #111;
+  margin-top: 4px;
+}
+
+.profile-back-btn {
+  margin-bottom: 18px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #262932;
+  background: #111318;
+  color: #e7e9ef;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-back-btn:hover {
+  border-color: rgba(255, 216, 74, .8);
+}
+
+@media (max-width: 768px) {
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-main-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
+.games-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.games-filter-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #262932;
+  background: #111318;
+  color: var(--text-main);
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.games-filter-btn.active,
+.games-filter-btn:hover {
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #111;
+  border-color: transparent;
+  font-weight: 500;
+}
+/* ===== ПАНЕЛЬ КАТЕГОРИЙ + ПОИСК ===== */
+
+.games-filter-bar {
+  max-width: 1400px;
+  margin: 32px auto 12px;
+}
+
+.games-filter-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* левая "капсула" с категориями */
+.games-filter-group {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: #111318;
+  border-radius: 12px;
+  border: 1px solid #262932;
+  overflow: hidden;
+}
+
+.games-filter-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-right: 1px solid #262932;
+}
+
+.games-filter-btn:last-child {
+  border-right: none;
+}
+
+.games-filter-icon {
+  font-size: 16px;
+}
+
+/* активная категория (как яркая кнопка слева) */
+.games-filter-btn.active {
+  background: linear-gradient(135deg, #e5ff6a, #ffd84a);
+  color: #111;
+  font-weight: 600;
+}
+
+/* hover, если не активная */
+.games-filter-btn:not(.active):hover {
+  background: #191b23;
+}
+
+/* правая часть — поиск */
+.games-search {
+  flex: 0 0 360px;
+  max-width: 100%;
+}
+
+.games-search-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: #111318;
+  border: 1px solid #262932;
+}
+
+.games-search-icon {
+  font-size: 16px;
+  color: var(--text-soft);
+}
+
+.games-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  width: 100%;
+}
+
+.games-search-input::placeholder {
+  color: var(--text-soft);
+}
+
+/* адаптив: на телефоне поиск под категориями */
+@media (max-width: 768px) {
+  .games-filter-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .games-filter-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .games-filter-btn {
+    padding: 8px 12px;
+  }
+
+  .games-search {
+    flex: 1;
+  }
+}
+
+.games-filter-icon,
+.games-search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.games-filter-icon img,
+.games-search-icon img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===== CRASH ROYAL ===== */
+
+.crash-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.crash-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.crash-title {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.crash-subtitle {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.crash-demo-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #111318;
+  border: 1px solid #2f3442;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-soft);
+}
+
+/* верхняя полоса истории */
+
+.crash-top-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 10px;
+}
+
+.crash-pill {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #111318;
+  color: var(--text-main);
+  border: 1px solid #262932;
+}
+
+.crash-pill-info {
+  background: #1d3a7a;
+  border-color: #2950a8;
+}
+
+.crash-pill-clock {
+  background: #111318;
+}
+
+.crash-history-scroll {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 3px 4px;
+  border-radius: 10px;
+  background: #111318;
+  border: 1px solid #262932;
+}
+
+.crash-history-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+.crash-history-scroll::-webkit-scrollbar-thumb {
+  background: #262932;
+  border-radius: 999px;
+}
+
+.crash-history-pill {
+  flex: 0 0 auto;
+  min-width: 56px;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: none;
+  cursor: default;
+  background: #171a23;
+  color: #e7e9ef;
+}
+.crash-history-pill.win { background: #23361b; color: #a5ff7b; }
+.crash-history-pill.lose { background: #3a1c1c; color: #ff8c8c; }
+
+/* основная карта */
+
+.crash-main-card {
+  background: #12141a;
+  border-radius: 18px;
+  border: 1px solid #252733;
+  padding: 14px 16px 16px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+}
+
+/* поле */
+
+.crash-board {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 0%, #27304a, #05060a);
+  padding: 40px 24px 36px;
+  margin-bottom: 14px;
+}
+
+.crash-board-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* контейнер графика */
+.crash-graph {
+  position: absolute;
+  left: 8%;
+  bottom: 14%;
+  width: 84%;
+  height: 60%;
+  pointer-events: none;
+}
+
+/* диагональная стрелка-график */
+.crash-graph-line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  /* сама линия */
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(86,173,255,0.3), rgba(86,173,255,1));
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(86,173,255,0.8);
+
+  /* старт: короткая линия, чуть вверх */
+  transform-origin: left center;
+  transform: scaleX(0.05) rotate(-25deg);
+  transition: transform .18s ease-out;
+}
+
+/* наконечник стрелы */
+.crash-graph-line::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+
+  background: rgba(86,173,255,1);
+  box-shadow: 0 0 12px rgba(86,173,255,0.9);
+}
+
+
+
+/* множитель */
+
+.crash-board-multiplier {
+  position: relative;
+  font-size: 54px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.crash-board-status {
+  position: relative;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-soft);
+  z-index: 2;
+}
+
+/* нижняя панель */
+
+.crash-bottom-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.crash-bottom-left {
+  flex: 1.2;
+  min-width: 260px;
+}
+
+.crash-bottom-right {
+  flex: 1;
+  min-width: 260px;
+}
+
+.crash-balance-block {
+  margin-bottom: 10px;
+}
+
+.crash-balance {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ввод очков */
+
+.crash-input-group {
+  margin-top: 4px;
+}
+
+.crash-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #151821;
+  border-radius: 10px;
+  border: 1px solid #252733;
+  padding: 3px 6px;
+}
+
+.crash-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  text-align: center;
+}
+
+.crash-step-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: #111318;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.crash-quick-bets {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.crash-quick-bet {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #252733;
+  background: #111318;
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+/* автоигра */
+
+.crash-auto-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 10px;
+}
+
+.crash-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.crash-checkbox input {
+  accent-color: #ffd84a;
+}
+
+.crash-auto-cashout {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  background: #151821;
+  border-radius: 999px;
+  border: 1px solid #252733;
+  padding: 3px 8px;
+}
+
+.crash-auto-cashout input {
+  width: 52px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+/* кнопки */
+
+.crash-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.crash-btn {
+  flex: 1;
+  min-width: 130px;
+  border-radius: 12px;
+  padding: 10px 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crash-btn-start {
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #111;
+  box-shadow: 0 12px 24px rgba(255,182,70,0.5);
+}
+
+.crash-btn-start:disabled {
+  opacity: .4;
+  box-shadow: none;
+  cursor: default;
+}
+
+.crash-btn-cashout {
+  background: #111318;
+  color: #e7e9ef;
+  border: 1px solid #2d3140;
+}
+
+.crash-btn-cashout:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+/* лог */
+
+.crash-log {
+  margin-top: 10px;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.crash-log-line {
+  margin-bottom: 2px;
+}
+
+/* адаптив */
+
+@media (max-width: 900px) {
+  .crash-board {
+    padding: 30px 18px 30px;
+  }
+
+  .crash-board-multiplier {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 768px) {
+  .crash-bottom-panel {
+    flex-direction: column;
+  }
+
+  .crash-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ===== CHICKEN ROAD ===== */
+
+/* Фон как на скрине */
+
+.chicken-board {
+  background: #242a48;
+  border-radius: 18px;
+  border: 1px solid #2f3557;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+  margin-bottom: 16px;
+}
+
+.chicken-bg {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  min-height: 260px;
+}
+
+/* левая часть с дверью и курицей */
+
+.chicken-bg-door {
+  background: #202643;
+  padding: 24px 22px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.chicken-bg-door-inner {
+  width: 90px;
+  height: 200px;
+  border-radius: 50px;
+  background: #111320;
+  box-shadow: inset 0 0 0 4px #2d3251;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.chicken-bg-chicken {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 20%, #fff6d6, #f3c750);
+  box-shadow: 0 0 20px rgba(255,222,120,0.9);
+  position: relative;
+}
+.chicken-bg-chicken::after {
+  content: '🐔';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+}
+
+/* правая часть с дорожками */
+
+.chicken-bg-lanes {
+  background: #2b3153;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0;
+  padding: 26px 0 14px;
+  position: relative;
+}
+
+.chicken-bg-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* вертикальная зона разделителя (чередующиеся прямоугольники) */
+.chicken-bg-col::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25) 40%,
+    transparent 40%
+  );
+  background-size: 4px 12px;
+  opacity: 0.5;
+}
+
+/* монетка-множитель */
+
+.chicken-bg-coin {
+  width: 110px;
+  height: 110px;
+  margin-bottom: 22px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 20%, #5e78ff, #28366a);
+  box-shadow: 0 0 18px rgba(84,120,255,0.9);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chicken-bg-coin::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.15);
+}
+
+.chicken-multi-value {
+  position: relative;
+  font-size: 22px;
+  font-weight: 700;
+  color: #eaf0ff;
+}
+
+/* нижняя дорожка и ворота */
+
+.chicken-bg-strip {
+  width: 100%;
+  height: 30px;
+  background: #252b48;
+  margin-top: auto;
+}
+
+.chicken-bg-gate {
+  width: 100px;
+  height: 60px;
+  border-radius: 18px 18px 6px 6px;
+  background: #131826;
+  border: 2px solid #3b4260;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.9);
+  position: relative;
+  margin-top: -10px;
+}
+
+.chicken-bg-bars {
+  position: absolute;
+  inset: 10px 14px;
+  border-radius: 12px;
+  background-image: linear-gradient(
+    to right,
+    rgba(255,255,255,0.1) 2px,
+    transparent 2px
+  );
+  background-size: 10px 100%;
+  opacity: 0.8;
+}
+
+/* маленький огонёк перед воротами (как на скрине) */
+.chicken-bg-fire {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 8px;
+  height: 18px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 20%, #fffecc, #ff5a3c);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(255,120,80,0.9);
+  opacity: 0.0;         /* по умолчанию выключен, можно включать для шага */
+}
+
+/* состояния для активной / safe / burn, чтобы совпадало с логикой */
+
+.chicken-bg-col.active .chicken-bg-gate {
+  border-color: #ffd84a;
+  box-shadow: 0 0 20px rgba(255,216,74,0.9);
+}
+.chicken-bg-col.active .chicken-bg-fire {
+  opacity: 1;
+}
+
+.chicken-bg-col.safe .chicken-bg-gate {
+  border-color: #7dff83;
+  box-shadow: 0 0 20px rgba(125,255,131,0.9);
+}
+.chicken-bg-col.safe .chicken-bg-fire {
+  opacity: 1;
+  background: radial-gradient(circle at 50% 20%, #eaffc6, #5eff62);
+}
+
+.chicken-bg-col.burn .chicken-bg-gate {
+  border-color: #ff5e5e;
+  box-shadow: 0 0 22px rgba(255,94,94,1);
+}
+.chicken-bg-col.burn .chicken-bg-fire {
+  opacity: 1;
+  background: radial-gradient(circle at 50% 20%, #fff6c6, #ff2a00);
+}
+
+
+/* нижняя панель */
+
+.chicken-bottom {
+  background: #111318;
+  border-radius: 16px;
+  border: 1px solid #262932;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) minmax(0, 0.8fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.chicken-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #151821;
+  border-radius: 10px;
+  border: 1px solid #252733;
+  padding: 3px 6px;
+}
+
+.chicken-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  text-align: center;
+}
+
+.chicken-step-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: #111318;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.chicken-quick-bets {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.chicken-quick-bet {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #252733;
+  background: #111318;
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.chicken-difficulty {
+  display: inline-flex;
+  border-radius: 999px;
+  background: #151821;
+  border: 1px solid #252733;
+  overflow: hidden;
+}
+
+.chicken-diff-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 13px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.chicken-diff-btn.active {
+  background: #27304a;
+  color: #ffffff;
+}
+
+.chicken-status {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.chicken-main-btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2ee06b, #41ff8a);
+  color: #111;
+  box-shadow: 0 12px 24px rgba(65,255,138,0.5);
+}
+.chicken-main-btn:disabled {
+  opacity: .4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.chicken-main-btn-secondary {
+  margin-top: 8px;
+  background: #111318;
+  color: #e7e9ef;
+  border: 1px solid #2d3140;
+  box-shadow: none;
+}
+
+.chicken-bottom-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chicken-log {
+  margin-top: 10px;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.chicken-log-line { margin-bottom: 2px; }
+
+@media (max-width: 960px) {
+  .chicken-bottom {
+    grid-template-columns: 1fr;
+  }
+  .chicken-lane {
+    flex-direction: column;
+  }
+  .chicken-door {
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 24px;
+  }
+}
+
+/* ===== SLOT: ROYAL SPIN (5 барабанов) ===== */
+
+.slot-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.slot-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.slot-title {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.slot-subtitle {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.slot-balance-block {
+  text-align: right;
+}
+
+.slot-label {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 4px;
+}
+
+.slot-balance {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Барабаны */
+
+.slot-board {
+  background: radial-gradient(circle at 20% 0%, #7b1338, #43001b);
+  border-radius: 24px;
+  border: 3px solid #f4c24e;
+  padding: 16px 18px;
+  box-shadow: 0 22px 50px rgba(0,0,0,0.85);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.slot-board::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+
+.slot-reels {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  height: 260px;
+}
+
+.slot-reel {
+  flex: 1;
+  border-radius: 18px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent 40%, rgba(0,0,0,0.35));
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,0.1),
+    inset 0 -8px 20px rgba(0,0,0,0.55);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* вертикальные золотые полосы между барабанами */
+.slot-reel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  width: 4px;
+  background: linear-gradient(to bottom, #ffe699, #ffbd3c);
+  box-shadow: 4px 0 8px rgba(0,0,0,0.7);
+  opacity: 0.9;
+}
+
+/* ячейки внутри барабана (визуально в одной колонке) */
+
+.slot-symbol {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.slot-symbol img {
+  width: 72%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+  transition: transform .15s ease-out, filter .15s ease-out, opacity .15s ease-out;
+}
+
+.slot-symbol-win img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 16px rgba(255,230,140,1));
+}
+
+/* состояние "крутится" */
+
+.slot-reel-spinning img {
+  animation: slot-reel-spin 0.28s linear infinite;
+  filter: blur(2px) brightness(1.1);
+  opacity: 0.85;
+}
+
+@keyframes slot-reel-spin {
+  0%   { transform: translateY(-60%); }
+  50%  { transform: translateY(0%); }
+  100% { transform: translateY(60%); }
+}
+
+/* нижняя панель */
+
+.slot-bottom {
+  background: #111318;
+  border-radius: 16px;
+  border: 1px solid #262932;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) minmax(0, 0.7fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.slot-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #151821;
+  border-radius: 10px;
+  border: 1px solid #252733;
+  padding: 3px 6px;
+}
+
+.slot-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  text-align: center;
+}
+
+.slot-step-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: #111318;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.slot-quick-bets {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.slot-quick-bet {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #252733;
+  background: #111318;
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.slot-lines {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.slot-status {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.slot-main-btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #111;
+  box-shadow: 0 12px 24px rgba(255,182,70,0.5);
+}
+
+.slot-main-btn:disabled {
+  opacity: .4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.slot-log {
+  margin-top: 10px;
+  max-height: 110px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.slot-log-line { margin-bottom: 2px; }
+
+@media (max-width: 960px) {
+  .slot-bottom {
+    grid-template-columns: 1fr;
+  }
+  .slot-reels {
+    height: 220px;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <!-- САЙДБАР -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <button class="burger-btn">☰</button>
+      <div class="mode-switch">
+        <button>Казино</button>
+      </div>
+    </div>
+
+    <input class="search-input" type="text" placeholder="Поиск" />
+
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link active" href="#">
+          <span class="menu-icon"><img src="icons/home.png"></span>
+          Главная
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/favorite.png"></span>
+          Избранное
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/bonus.png"></span>
+          Бонусы
+        </a>
+      </li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="menu-section-title">Игры</div>
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/slots.png"></span>
+          Слоты
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/popular.png"></span>
+          Популярные
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/fast.png"></span>
+          Быстрые игры
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/new.png"></span>
+          Новинки
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/recommended.png"></span>
+          Рекомендуемые
+        </a>
+      </li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="menu-section-title">Live Казино</div>
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/blackjack.png"></span>
+          Блэкджек
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/roulette.png"></span>
+          Рулетка
+        </a>
+      </li>
+      <li class="menu-item">
+        <a class="menu-link" href="#">
+          <span class="menu-icon"><img src="icons/baccarat.png"></span>
+          Баккара
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <div class="divider"></div>
+      <div class="bottom-row">
+        <div class="lang-btn"></div>
+        <div class="support-btn">
+          <span class="support-icon"><img src="icons/support.png"></span>
+          Поддержка
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="logo-wrapper">
+      <button class="mobile-burger" id="burgerToggle">☰</button>
+      <img src="logo.png" alt="Royal Bet">
+    </div>
+
+    <div class="top-bar-right">
+      <div class="wallet" id="walletBtn">
+        <span class="wallet-symbol" id="walletCurrencySymbol">₴</span>
+        <span class="wallet-balance">0.00</span>
+        <span class="wallet-arrow">▾</span>
+      </div>
+
+      <button class="btn-deposit" id="depositBtn">Пополнить</button>
+
+      <div class="profile-avatar">
+        <img src="icons/avatar.png" alt="">
+        <span class="profile-status"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ПРОМО-БЛОК -->
+  <main class="page-content" id="mainPage">
+    <section class="promo-section">
+      <div class="promo-layout">
+  <div class="promo-main">
+    <img
+      id="promoSlider"
+      class="promo-img"
+      src="banners/promo1.jpg"
+      alt="Промо баннер"
+    >
+  </div>
+</div>
+    </section>
+
+    <!-- СЛОТЫ / КАРТОЧКИ ИГР -->
+    <!-- ПАНЕЛЬ ФИЛЬТРОВ (СВЕРХУ СТРАНИЦЫ) -->
+<!-- ПАНЕЛЬ ФИЛЬТРОВ (СВЕРХУ СТРАНИЦЫ) -->
+<!-- ВЕРХНЕЕ МЕНЮ КАТЕГОРИЙ + ПОИСК -->
+<section class="games-filter-bar">
+  <div class="games-filter-inner">
+    <!-- ЛЕВАЯ ЧАСТЬ: КАТЕГОРИИ -->
+    <div class="games-filter-group">
+      <button class="games-filter-btn active" data-target="all">
+        <span class="games-filter-icon">
+          <img src="icons/all-games.png" alt="">
+        </span>
+        <span>Все игры</span>
+      </button>
+
+      <button class="games-filter-btn" data-target="slotsSection">
+        <span class="games-filter-icon">
+          <img src="icons/slots.png" alt="">
+        </span>
+        <span>Слоты</span>
+      </button>
+
+      <button class="games-filter-btn" data-target="newSection">
+        <span class="games-filter-icon">
+          <img src="icons/new.png" alt="">
+        </span>
+        <span>Новинки</span>
+      </button>
+
+      <button class="games-filter-btn" data-target="fastSection">
+        <span class="games-filter-icon">
+          <img src="icons/fast.png" alt="">
+        </span>
+        <span>Быстрые игры</span>
+      </button>
+
+      <button class="games-filter-btn" data-target="popularSection">
+        <span class="games-filter-icon">
+          <img src="icons/popular.png" alt="">
+        </span>
+        <span>Популярные</span>
+      </button>
+    </div>
+
+    <!-- ПРАВАЯ ЧАСТЬ: ПОИСК -->
+    <div class="games-search">
+      <div class="games-search-inner">
+        <span class="games-search-icon">
+          <img src="icons/search.png" alt="">
+        </span>
+        <input
+          type="text"
+          id="gameSearch"
+          class="games-search-input"
+          placeholder="Поиск от 3 символов"
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- СЕКЦИЯ: СЛОТЫ -->
+<section class="games-section" id="slotsSection">
+  <div class="games-header">
+    <h2 class="games-title">Слоты</h2>
+    <div class="games-controls">
+      <button class="games-arrow games-arrow-prev">‹</button>
+      <button class="games-arrow games-arrow-next">›</button>
+    </div>
+  </div>
+
+  <div class="games-row">
+    <!-- здесь ТВОИ карточки слотов -->
+    <!-- КАРТОЧКА СЛОТА В ЛОББИ -->
+<article class="game-card" data-open-game="slot-royal">
+  <div class="game-badge">Слот</div>
+  <div class="game-thumb">
+    <!-- можешь заменить на свой баннер -->
+    <img src="games/slot-royal.jpg" alt="Royal Spin">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Royal Spin</div>
+    <div class="game-provider">ROYAL STUDIO</div>
+  </div>
+</article>
+
+
+<article class="game-card">
+  <div class="game-badge">Новинка</div>
+  <div class="game-thumb">
+    <img src="games/joker-stoker.jpg" alt="Joker Stoker">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Joker Stoker</div>
+    <div class="game-provider">ENDORPHINA</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Новинка</div>
+  <div class="game-thumb">
+    <img src="games/gates-of-olympus.jpg" alt="Gates of Olympus">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Gates of Olympus</div>
+    <div class="game-provider">PRAGMATIC PLAY</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Top</div>
+  <div class="game-thumb">
+    <img src="games/baba-yaga-tales.jpg" alt="Baba Yaga Tales">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Baba Yaga Tales</div>
+    <div class="game-provider">SPINOMENAL</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Hot</div>
+  <div class="game-thumb">
+    <img src="games/3-energy-crowns.jpg" alt="3 Energy Crowns">
+  </div>
+  <div class="game-info">
+    <div class="game-title">3 Energy Crowns</div>
+    <div class="game-provider">AMIGO GAMING</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/mega-fruits.jpg" alt="Mega Fruits">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Mega Fruits</div>
+    <div class="game-provider">AMATIC</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/ultra-star.jpg" alt="Ultra Star">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Ultra Star</div>
+    <div class="game-provider">NOVOMATIC</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/book-of-gold.jpg" alt="Book of Gold">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Book of Gold</div>
+    <div class="game-provider">PLAYSUN</div>
+  </div>
+</article>
+
+    <!-- остальные слоты по тому же шаблону -->
+  </div>
+</section>
+
+<!-- СЕКЦИЯ: БЫСТРЫЕ ИГРЫ -->
+<section class="games-section" id="fastSection">
+  <div class="games-header">
+    <h2 class="games-title">Быстрые игры</h2>
+    <div class="games-controls">
+      <button class="games-arrow games-arrow-prev">‹</button>
+      <button class="games-arrow games-arrow-next">›</button>
+    </div>
+  </div>
+
+  <div class="games-row">
+    <!-- свои быстрые игры -->
+    <!-- БЫСТРЫЕ ИГРЫ -->
+
+    <article class="game-card" data-open-game="crash-royal">
+  <div class="game-badge">Crash</div>
+  <div class="game-thumb">
+    <img src="games/crash-royal.jpg" alt="Crash Royal">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Crash Royal</div>
+    <div class="game-provider">ROYAL STUDIO</div>
+  </div>
+</article>
+<article class="game-card" data-open-game="chicken-road">
+  <div class="game-badge">Fast</div>
+  <div class="game-thumb">
+    <img src="games/chicken-road.jpg" alt="Chicken Road">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Chicken Road</div>
+    <div class="game-provider">ROYAL STUDIO</div>
+  </div>
+</article>
+
+
+<article class="game-card">
+  <div class="game-badge">С мгновенным выигрышем</div>
+  <div class="game-thumb">
+    <img src="games/coin-flip.jpg" alt="Coin Flip">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Coin Flip</div>
+    <div class="game-provider">EVOPLAY</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Моментальная</div>
+  <div class="game-thumb">
+    <img src="games/plinko.jpg" alt="Plinko X">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Plinko X</div>
+    <div class="game-provider">HACKSAW</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/mines.jpg" alt="Mines">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Mines</div>
+    <div class="game-provider">SPRYBE</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/dice-duel.jpg" alt="Dice Duel">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Dice Duel</div>
+    <div class="game-provider">BGAMING</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/hi-lo.jpg" alt="Hi-Lo">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Hi-Lo</div>
+    <div class="game-provider">PRAGMATIC PLAY</div>
+  </div>
+</article>
+
+  </div>
+</section>
+
+<!-- СЕКЦИЯ: ПОПУЛЯРНЫЕ -->
+<section class="games-section" id="popularSection">
+  <div class="games-header">
+    <h2 class="games-title">Популярные</h2>
+    <div class="games-controls">
+      <button class="games-arrow games-arrow-prev">‹</button>
+      <button class="games-arrow games-arrow-next">›</button>
+    </div>
+  </div>
+
+  <div class="games-row">
+    <!-- популярные игры (можешь дублировать слоты/быстрые, не важно) -->
+    <!-- ПОПУЛЯРНЫЕ -->
+<article class="game-card">
+  <div class="game-badge">Top</div>
+  <div class="game-thumb">
+    <img src="games/sweet-bonanza.jpg" alt="Sweet Bonanza">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Sweet Bonanza</div>
+    <div class="game-provider">PRAGMATIC PLAY</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Top</div>
+  <div class="game-thumb">
+    <img src="games/100-sevens-santa.jpg" alt="100 Sevens Santa">
+  </div>
+  <div class="game-info">
+    <div class="game-title">100 Sevens Santa</div>
+    <div class="game-provider">SPINOMENAL</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-badge">Hot</div>
+  <div class="game-thumb">
+    <img src="games/diver.jpg" alt="Diver x9.63">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Diver</div>
+    <div class="game-provider">AMIGO GAMING</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/big-bass-bonanza.jpg" alt="Big Bass Bonanza">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Big Bass Bonanza</div>
+    <div class="game-provider">PRAGMATIC PLAY</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/book-of-dead.jpg" alt="Book of Dead">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Book of Dead</div>
+    <div class="game-provider">PLAY'N GO</div>
+  </div>
+</article>
+
+<article class="game-card">
+  <div class="game-thumb">
+    <img src="games/starburst.jpg" alt="Starburst">
+  </div>
+  <div class="game-info">
+    <div class="game-title">Starburst</div>
+    <div class="game-provider">NETENT</div>
+  </div>
+</article>
+
+  </div>
+</section>
+
+<!-- СЕКЦИЯ: НОВИНКИ -->
+<section class="games-section" id="newSection">
+  <div class="games-header">
+    <h2 class="games-title">Новинки</h2>
+    <div class="games-controls">
+      <button class="games-arrow games-arrow-prev">‹</button>
+      <button class="games-arrow games-arrow-next">›</button>
+    </div>
+  </div>
+
+  <div class="games-row">
+    <!-- новинки -->
+    <article class="game-card">
+      <div class="game-badge">New</div>
+      <div class="game-thumb">
+        <img src="games/game4.jpg" alt="New Slot">
+      </div>
+      <div class="game-info">
+        <div class="game-title">New Slot</div>
+        <div class="game-provider">Provider</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+  </main>
+
+    <!-- ЛИЧНЫЙ КАБИНЕТ -->
+  <main class="page-content" id="profilePage" style="display:none;">
+    <button class="profile-back-btn" id="profileBackBtn">← На главную</button>
+
+    <div class="profile-header">
+      <h1 class="profile-title">Личный профиль</h1>
+
+      <div class="profile-tabs">
+        <button class="profile-tab active" data-tab="profile">Профиль</button>
+        <button class="profile-tab" data-tab="security">Безопасность</button>
+      </div>
+    </div>
+
+    <section class="profile-main-card">
+      <div class="profile-main-left">
+        <div class="profile-avatar-big">
+          <img src="icons/avatar.png" alt="">
+        </div>
+        <div>
+          <div class="profile-name">Player eb54460b</div>
+          <div class="profile-id">
+            ID: eb54460b
+            <button class="copy-id-btn" id="copyIdBtn">Копировать мой ID</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ТАБ "ПРОФИЛЬ" -->
+    <section class="profile-form-card" id="profileTab">
+      <div class="profile-form-title">Персональные данные</div>
+
+      <div class="profile-form-grid">
+        <div class="form-field">
+          <label class="form-label">Имя</label>
+          <input class="form-input" type="text" placeholder="Ваше имя">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Фамилия</label>
+          <input class="form-input" type="text" placeholder="Ваша фамилия">
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Дата рождения</label>
+          <input class="form-input" type="date">
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Пол</label>
+          <select class="form-select">
+            <option value="" selected disabled>Выберите</option>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+            <option value="other">Другое</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="profile-save-btn">Сохранить</button>
+    </section>
+
+    <!-- ТАБ "БЕЗОПАСНОСТЬ" -->
+    <section class="profile-form-card" id="securityTab" style="display:none;">
+      <div class="profile-form-title">Безопасность</div>
+      <p style="color: var(--text-soft); font-size:14px;">
+        Здесь могут быть настройки пароля, двухфакторной аутентификации и т.п.
+      </p>
+    </section>
+  </main>
+
+  <!-- СТРАНИЦА ИГРЫ CRASH ROYAL -->
+<main class="page-content" id="crashRoyalPage" style="display:none;">
+  <button class="profile-back-btn" id="crashBackBtn">← Назад в лобби</button>
+
+  <section class="crash-wrapper">
+    <div class="crash-header-row">
+      <div>
+        <h1 class="crash-title">Crash Royal</h1>
+        <p class="crash-subtitle">Демо-режим • игра на условные очки</p>
+      </div>
+      <div class="crash-demo-pill">Demo</div>
+    </div>
+
+    <!-- верхняя полоса истории коэффициентов -->
+    <div class="crash-top-strip">
+      <button class="crash-pill crash-pill-info">?</button>
+      <div class="crash-history-scroll" id="crashRounds">
+        <!-- сюда JS будет добавлять последние множители -->
+      </div>
+      <button class="crash-pill crash-pill-clock">🕒</button>
+    </div>
+
+    <!-- основная карта игры -->
+    <div class="crash-main-card">
+      <!-- игровое поле -->
+      <div class="crash-board">
+  <div class="crash-board-grid"></div>
+
+  <!-- НОВЫЙ ГРАФИК-СТРЕЛКА -->
+  <div class="crash-graph">
+    <div class="crash-graph-line"></div>
+  </div>
+
+  <div class="crash-board-multiplier">
+    x<span id="crashMultiplier">1.00</span>
+  </div>
+  <div class="crash-board-status" id="crashStatus">
+    Нажми «СТАРТ», чтобы войти в следующий раунд
+  </div>
+</div>
+
+
+      <!-- нижняя панель управления -->
+      <div class="crash-bottom-panel">
+        <div class="crash-bottom-left">
+          <div class="crash-balance-block">
+            <div class="crash-label">Демо баланс</div>
+            <div class="crash-balance">
+              <span id="crashBalance">1000</span> CR
+            </div>
+          </div>
+
+          <div class="crash-input-group">
+            <label class="crash-label" for="crashBet">Очков в раунде</label>
+            <div class="crash-input-wrap">
+              <button class="crash-step-btn" data-step="-10">−</button>
+              <input id="crashBet" class="crash-input" type="number" min="1" step="1" value="10">
+              <button class="crash-step-btn" data-step="10">+</button>
+            </div>
+            <div class="crash-quick-bets">
+              <button class="crash-quick-bet" data-quick="5">5</button>
+              <button class="crash-quick-bet" data-quick="25">25</button>
+              <button class="crash-quick-bet" data-quick="50">50</button>
+              <button class="crash-quick-bet" data-quick="100">100</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="crash-bottom-right">
+          <div class="crash-auto-row">
+            <label class="crash-checkbox">
+              <input type="checkbox" id="crashAutoBet">
+              <span>Автоигра</span>
+            </label>
+            <label class="crash-checkbox">
+              <input type="checkbox" id="crashAutoCashoutCheck">
+              <span>Автовыход при</span>
+            </label>
+            <div class="crash-auto-cashout">
+              × <input id="crashAutoCashout" type="number" min="1.1" step="0.1" value="2.0">
+            </div>
+          </div>
+
+          <div class="crash-buttons">
+            <button class="crash-btn crash-btn-start" id="crashStartBtn">СТАРТ</button>
+            <button class="crash-btn crash-btn-cashout" id="crashCashoutBtn" disabled>ЗАБРАТЬ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- лог под графиком -->
+      <div class="crash-log" id="crashLog"></div>
+    </div>
+  </section>
+</main>
+
+<!-- СТРАНИЦА ИГРЫ CHICKEN ROAD -->
+<main class="page-content" id="chickenRoadPage" style="display:none;">
+  <button class="profile-back-btn" id="chickenBackBtn">← Назад в лобби</button>
+
+  <section class="chicken-wrapper">
+    <div class="chicken-header-row">
+      <div>
+        <h1 class="chicken-title">Chicken Road</h1>
+        <p class="chicken-subtitle">Демо-режим • игра на условные очки</p>
+      </div>
+      <div class="chicken-balance-block">
+        <div class="chicken-label">Демо баланс</div>
+        <div class="chicken-balance"><span id="chickenBalance">1000</span> CR</div>
+      </div>
+    </div>
+
+    <!-- поле с дорожками -->
+    <div class="chicken-board">
+  <div class="chicken-bg">
+    <!-- левая колонка с дверью и курицей -->
+    <div class="chicken-bg-door">
+      <div class="chicken-bg-door-inner">
+        <div class="chicken-bg-chicken"></div>
+      </div>
+    </div>
+
+    <!-- колонны с дорожками -->
+    <div class="chicken-bg-lanes" id="chickenRoadColumns">
+      <!-- по 1 колонке на шаг -->
+      <div class="chicken-bg-col" data-step="1">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">1.23x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="2">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">1.55x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="3">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">1.98x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="4">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">2.56x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="5">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">3.36x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="6">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">4.49x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="7">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">5.49x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+
+      <div class="chicken-bg-col" data-step="8">
+        <div class="chicken-bg-coin">
+          <span class="chicken-multi-value">7.50x</span>
+        </div>
+        <div class="chicken-bg-strip"></div>
+        <div class="chicken-bg-gate">
+          <div class="chicken-bg-bars"></div>
+          <div class="chicken-bg-fire"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- нижняя панель управления -->
+    <div class="chicken-bottom">
+      <div class="chicken-bottom-left">
+        <div class="chicken-label">Очков в раунде</div>
+        <div class="chicken-input-wrap">
+          <button class="chicken-step-btn" data-step="-10">−</button>
+          <input id="chickenBet" class="chicken-input" type="number" min="1" step="1" value="10">
+          <button class="chicken-step-btn" data-step="10">+</button>
+        </div>
+        <div class="chicken-quick-bets">
+          <button class="chicken-quick-bet" data-quick="5">5</button>
+          <button class="chicken-quick-bet" data-quick="25">25</button>
+          <button class="chicken-quick-bet" data-quick="50">50</button>
+          <button class="chicken-quick-bet" data-quick="100">100</button>
+        </div>
+      </div>
+
+      <div class="chicken-bottom-center">
+        <div class="chicken-label">Сложность</div>
+        <div class="chicken-difficulty">
+          <button class="chicken-diff-btn active" data-mode="easy">Лёгкий</button>
+          <button class="chicken-diff-btn" data-mode="medium">Средний</button>
+          <button class="chicken-diff-btn" data-mode="hard">Сложный</button>
+        </div>
+        <div class="chicken-status" id="chickenStatus">Нажми «Играть», чтобы начать раунд</div>
+      </div>
+
+      <div class="chicken-bottom-right">
+        <button class="chicken-main-btn" id="chickenPlayBtn">Играть</button>
+        <button class="chicken-main-btn chicken-main-btn-secondary" id="chickenCashoutBtn" disabled>Забрать</button>
+      </div>
+    </div>
+
+    <div class="chicken-log" id="chickenLog"></div>
+  </section>
+</main>
+
+<!-- СТРАНИЦА СЛОТА ROYAL SPIN -->
+<main class="page-content" id="slotRoyalPage" style="display:none;">
+  <button class="profile-back-btn" id="slotBackBtn">← Назад в лобби</button>
+
+  <section class="slot-wrapper">
+    <div class="slot-header-row">
+      <div>
+        <h1 class="slot-title">Royal Spin</h1>
+        <p class="slot-subtitle">Демо-режим • играешь на условные монеты</p>
+      </div>
+      <div class="slot-balance-block">
+        <div class="slot-label">Демо баланс</div>
+        <div class="slot-balance"><span id="slotBalance">1000</span> CR</div>
+      </div>
+    </div>
+
+    <!-- БАРАБАНЫ -->
+    <div class="slot-board">
+      <div class="slot-reels" id="slotReels">
+        <!-- 5 барабанов по 3 символа -->
+        <div class="slot-reel" data-reel="0">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="1">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="2">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="3">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="4">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <div class="slot-bottom">
+      <div class="slot-bottom-left">
+        <div class="slot-label">Ставка за спин</div>
+        <div class="slot-input-wrap">
+          <button class="slot-step-btn" data-step="-10">−</button>
+          <input id="slotBet" class="slot-input" type="number" min="1" step="1" value="10">
+          <button class="slot-step-btn" data-step="10">+</button>
+        </div>
+        <div class="slot-quick-bets">
+          <button class="slot-quick-bet" data-quick="10">10</button>
+          <button class="slot-quick-bet" data-quick="25">25</button>
+          <button class="slot-quick-bet" data-quick="50">50</button>
+          <button class="slot-quick-bet" data-quick="100">100</button>
+        </div>
+      </div>
+
+      <div class="slot-bottom-center">
+        <div class="slot-label">Линии</div>
+        <div class="slot-lines">1 линия (средний ряд)</div>
+        <div class="slot-status" id="slotStatus">
+          Нажми «SPIN», чтобы крутить барабаны
+        </div>
+      </div>
+
+      <div class="slot-bottom-right">
+        <button class="slot-main-btn" id="slotSpinBtn">SPIN</button>
+      </div>
+    </div>
+
+    <div class="slot-log" id="slotLog"></div>
+  </section>
+</main>
+
+
+
+
+
+  <!-- BALANCE POPUP -->
+  <div class="balance-overlay" id="balanceOverlay">
+    <div class="balance-panel" id="balancePanel">
+      <div class="balance-title">Баланс</div>
+
+      <div class="balance-label">Основной счет • <span id="currencyLabel">UAH</span></div>
+      <div class="balance-main-row">
+        <div class="balance-main-amount">0.00₴</div>
+
+        <button class="currency-select" type="button" id="currencySelect">
+          <span class="currency-code" id="currencyCodeText">UAH</span>
+          <span class="select-arrow">▾</span>
+        </button>
+      </div>
+
+      <div class="currency-dropdown" id="currencyDropdown">
+        <div class="currency-item" data-code="UAH" data-symbol="₴">
+          <span>₴</span><span>UAH</span>
+        </div>
+        <div class="currency-item" data-code="USD" data-symbol="$">
+          <span>$</span><span>USD</span>
+        </div>
+        <div class="currency-item" data-code="EUR" data-symbol="€">
+          <span>€</span><span>EUR</span>
+        </div>
+      </div>
+
+      <div class="bonus-card">
+        <div class="bonus-row-top">
+          <span>Бонусный счет</span>
+          <span class="bonus-arrow">›</span>
+        </div>
+        <div class="bonus-amount">0.00₴</div>
+      </div>
+
+      <button class="balance-wallet-btn" id="walletOpenBtn">Кошелек</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА КОШЕЛЬКА -->
+  <div class="wallet-overlay" id="walletOverlay">
+    <div class="wallet-modal">
+      <div class="wallet-modal-header">
+        <div class="wallet-header-left">
+          <button class="wallet-back-btn hidden" id="walletBackBtn">
+            <span>←</span><span>Назад</span>
+          </button>
+          <div class="wallet-modal-title" id="walletModalTitle">Кошелек</div>
+        </div>
+        <button class="wallet-modal-close" id="walletModalClose">×</button>
+      </div>
+
+      <div class="wallet-tabs">
+        <button class="wallet-tab active" data-tab="deposit">Депозит</button>
+        <button class="wallet-tab" data-tab="withdraw">Вывод</button>
+        <button class="wallet-tab" data-tab="history">История</button>
+      </div>
+
+      <div class="wallet-banner">
+        <img src="banners/promo.png" alt="Promo">
+      </div>
+
+      <div class="wallet-modal-body">
+        <!-- ДЕПОЗИТ -->
+        <div class="wallet-tab-panel active" data-panel="deposit">
+          <div class="deposit-select" id="depositSelectStep">
+            <div class="wallet-deposit-subtitle">Криптовалюта</div>
+            <div class="crypto-grid" id="cryptoGrid">
+              <!-- Пример карт -->
+              <div class="crypto-card"
+                   data-network="Tron"
+                   data-min="15.00"
+                   data-symbol="USDTTRC20">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">USDT</div>
+                    <div class="crypto-sub">(TRC20)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-trc20.png" alt="USDT TRC20">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/tron.png" alt="TRON">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="crypto-card"
+                   data-network="BEP20"
+                   data-min="15.00"
+                   data-symbol="USDTBEP20">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">USDT</div>
+                    <div class="crypto-sub">(BEP20)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-bep20.png" alt="USDT BEP20">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/bsc.png" alt="BSC">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="crypto-card"
+                   data-network="TON"
+                   data-min="15.00"
+                   data-symbol="USDTTON">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">USDT</div>
+                    <div class="crypto-sub">(Toncoin)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-toncoin.png" alt="USDT TONCOIN">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/ton.png" alt="TON">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="crypto-card"
+                   data-network="TON"
+                   data-min="7.50"
+                   data-symbol="TONCOIN">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">TON</div>
+                    <div class="crypto-sub">(Toncoin)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-toncoin.png" alt="TONCOIN">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/ton.png" alt="TON">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="crypto-card"
+                   data-network="ETH"
+                   data-min="0.075"
+                   data-symbol="ETH">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">ETH</div>
+                    <div class="crypto-sub">(Ethereum)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-ethereum.png" alt="ETHEREUM">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/eth.png" alt="ETH">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="crypto-card"
+                   data-network="TRX"
+                   data-min="15.00"
+                   data-symbol="TRX">
+                <div class="crypto-card-main">
+                  <div class="crypto-text">
+                    <div class="crypto-name">TRX</div>
+                    <div class="crypto-sub">(Tron)</div>
+                  </div>
+                  <div class="crypto-icons">
+                    <div class="crypto-icon-wrap">
+                      <div class="crypto-coin">
+                        <img src="coins/usdt-tron.png" alt="TRON">
+                      </div>
+                      <div class="crypto-network">
+                        <img src="networks/trx.png" alt="TRX">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="crypto-bottom">
+                  <div class="crypto-bonus-pill">
+                    <img src="icons/gift.png" alt="">
+                    <span>+5%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- добавь остальные монеты по этому же шаблону -->
+            </div>
+          </div>
+
+          <div class="deposit-payment" id="depositPaymentStep">
+            <div class="pay-row">
+              <div class="pay-row-left">
+                <div class="pay-icon">
+                  <img id="payCoinImg" src="coins/usdt-trc20.png" alt="">
+                </div>
+                <div class="pay-text">
+                  <div class="pay-label">Минимальная сумма</div>
+                  <div class="pay-value" id="payMinAmount">10.00 USDTTRC20</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pay-row">
+              <div class="pay-row-left">
+                <div class="pay-icon">
+                  <img src="icons/address.png" alt="">
+                </div>
+                <div class="pay-text">
+                  <div class="pay-label">Ваш постоянный адрес</div>
+                  <div class="pay-value-address" id="payAddress">
+                    TRKBMFY2PVENJjr7HdGQT9mxHSpW3xiMz3
+                  </div>
+                </div>
+              </div>
+              <div class="pay-row-right">
+                <button class="pay-pill-btn" id="copyAddressBtn">Копировать</button>
+              </div>
+            </div>
+
+            <div class="pay-row">
+              <div class="pay-row-left">
+                <div class="pay-icon">
+                  <img id="payNetworkImg" src="networks/tron.png" alt="">
+                </div>
+                <div class="pay-text">
+                  <div class="pay-label">Сеть</div>
+                  <div class="pay-value" id="payNetwork">Tron</div>
+                </div>
+              </div>
+              <div class="pay-row-right">
+                <button class="pay-pill-btn">QR</button>
+              </div>
+            </div>
+
+            <div class="pay-warnings">
+              <div class="pay-warning-card">
+                <div class="pay-warning-icon">⚠️</div>
+                <div>
+                  Вы переводите валюту <span id="payWarningCurrency">USDTTRC20</span> в сети
+                  <span id="payWarningNetwork">Tron</span>. Использование другой сети приведёт
+                  к потере средств.
+                </div>
+              </div>
+              <div class="pay-warning-card">
+                <div class="pay-warning-icon">⚠️</div>
+                <div>
+                  Внимательно проверьте минимальную сумму депозита. Сумма ниже минимальной
+                  не будет зачислена на игровой аккаунт.
+                </div>
+              </div>
+            </div>
+
+            <div class="bonus-toggle-card">
+              <div class="bonus-toggle-text">
+                <span>Бонус 50% на депозит</span>
+                <small>Условия бонуса</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ВЫВОД -->
+        <div class="wallet-tab-panel" data-panel="withdraw">
+          <div class="withdraw-wrapper">
+            <div class="withdraw-header">
+              <div class="withdraw-title">Вывод криптовалютой</div>
+              <div class="withdraw-balance">
+                Баланс: <span id="withdrawBalanceAmount">0.00</span>&nbsp;
+                <span id="withdrawBalanceCode">USDTTRC20</span>
+              </div>
+            </div>
+
+            <!-- Селект валюты -->
+            <div class="withdraw-select-wrapper">
+              <button class="withdraw-select" type="button" id="withdrawSelectBtn">
+                <div class="withdraw-select-left">
+                  <div class="withdraw-select-icon-wrap">
+                    <div class="withdraw-coin">
+                      <img id="withdrawCoinImg" src="coins/usdt-trc20.png" alt="">
+                    </div>
+                    <div class="withdraw-network">
+                      <img id="withdrawNetworkImg" src="networks/tron.png" alt="">
+                    </div>
+                  </div>
+                  <div class="withdraw-select-text">
+                    <div class="withdraw-select-main" id="withdrawSelectMain">USDT (TRC20)</div>
+                  </div>
+                </div>
+                <span class="withdraw-select-arrow">▾</span>
+              </button>
+
+              <!-- Выпадающий список валют -->
+              <div class="withdraw-dropdown" id="withdrawDropdown">
+                <div class="withdraw-option"
+                     data-code="USDTTRC20"
+                     data-main="USDT (TRC20)"
+                     data-min="15"
+                     data-short="USDT"
+                     data-coin-img="coins/usdt-trc20.png"
+                     data-net-img="networks/tron.png">
+                  <div class="withdraw-select-icon-wrap">
+                    <div class="withdraw-coin">
+                      <img src="coins/usdt-trc20.png" alt="">
+                    </div>
+                    <div class="withdraw-network">
+                      <img src="networks/tron.png" alt="">
+                    </div>
+                  </div>
+                  <div class="withdraw-option-text">
+                    <div class="withdraw-option-main">USDT (TRC20)</div>
+                    <div class="withdraw-option-sub">Сеть Tron</div>
+                  </div>
+                </div>
+
+                <div class="withdraw-option"
+                     data-code="BTC"
+                     data-main="BTC (Bitcoin)"
+                     data-min="0.0005"
+                     data-short="BTC"
+                     data-coin-img="coins/btc.png"
+                     data-net-img="networks/btc.png">
+                  <div class="withdraw-select-icon-wrap">
+                    <div class="withdraw-coin">
+                      <img src="coins/btc.png" alt="">
+                    </div>
+                    <div class="withdraw-network">
+                      <img src="networks/btc.png" alt="">
+                    </div>
+                  </div>
+                  <div class="withdraw-option-text">
+                    <div class="withdraw-option-main">BTC (Bitcoin)</div>
+                    <div class="withdraw-option-sub">Сеть Bitcoin</div>
+                  </div>
+                </div>
+
+                <div class="withdraw-option"
+                     data-code="ETH"
+                     data-main="ETH (ERC20)"
+                     data-min="0.01"
+                     data-short="ETH"
+                     data-coin-img="coins/eth.png"
+                     data-net-img="networks/eth.png">
+                  <div class="withdraw-select-icon-wrap">
+                    <div class="withdraw-coin">
+                      <img src="coins/eth.png" alt="">
+                    </div>
+                    <div class="withdraw-network">
+                      <img src="networks/eth.png" alt="">
+                    </div>
+                  </div>
+                  <div class="withdraw-option-text">
+                    <div class="withdraw-option-main">ETH (ERC20)</div>
+                    <div class="withdraw-option-sub">Сеть Ethereum</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Адрес -->
+            <div class="withdraw-row">
+              <input class="withdraw-input"
+                     id="withdrawAddress"
+                     type="text"
+                     placeholder="Адрес кошелька">
+            </div>
+
+            <!-- Минималка -->
+            <div class="withdraw-row">
+              <div class="withdraw-min" id="withdrawMinText">
+                Минимальная сумма 15 USDTTRC20
+              </div>
+            </div>
+
+            <button class="withdraw-confirm">Подтвердить</button>
+          </div>
+        </div>
+
+        <!-- ИСТОРИЯ -->
+        <div class="wallet-tab-panel" data-panel="history">
+          <div class="wallet-deposit-subtitle">История операций</div>
+          <div class="history-list">
+            <div class="history-item">
+              <div class="h-left">
+                <div class="h-type">Депозит USDTTRC20</div>
+                <div class="h-meta">10.00 • Tron • 10.12.2025, 16:45</div>
+              </div>
+              <div>
+                <div class="h-amount">+10.00</div>
+                <div class="h-status">Зачислено</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+    const burgerToggle = document.getElementById('burgerToggle');
+    const sidebarBurgerBtn = document.querySelector('.sidebar .burger-btn');
+
+    const walletBtn = document.getElementById('walletBtn');
+    const balanceOverlay = document.getElementById('balanceOverlay');
+    const balancePanel = document.getElementById('balancePanel');
+    const currencySelect = document.getElementById('currencySelect');
+    const currencyDropdown = document.getElementById('currencyDropdown');
+    const currencyCodeText = document.getElementById('currencyCodeText');
+    const currencyLabel = document.getElementById('currencyLabel');
+    const walletCurrencySymbol = document.getElementById('walletCurrencySymbol');
+
+    const depositBtn = document.getElementById('depositBtn');
+    const walletOpenBtn = document.getElementById('walletOpenBtn');
+
+    const walletOverlay = document.getElementById('walletOverlay');
+    const walletModalClose = document.getElementById('walletModalClose');
+    const walletModalTitle = document.getElementById('walletModalTitle');
+    const walletBackBtn = document.getElementById('walletBackBtn');
+
+    const walletTabs = document.querySelectorAll('.wallet-tab');
+    const walletPanels = document.querySelectorAll('.wallet-tab-panel');
+
+    const depositSelectStep = document.getElementById('depositSelectStep');
+    const depositPaymentStep = document.getElementById('depositPaymentStep');
+
+    const payCoinImg = document.getElementById('payCoinImg');
+    const payNetworkImg = document.getElementById('payNetworkImg');
+    const payMinAmount = document.getElementById('payMinAmount');
+    const payNetwork = document.getElementById('payNetwork');
+    const payWarningCurrency = document.getElementById('payWarningCurrency');
+    const payWarningNetwork = document.getElementById('payWarningNetwork');
+    const copyAddressBtn = document.getElementById('copyAddressBtn');
+    const payAddress = document.getElementById('payAddress');
+
+    const withdrawSelectBtn = document.getElementById('withdrawSelectBtn');
+    const withdrawDropdown = document.getElementById('withdrawDropdown');
+    const withdrawCoinImg = document.getElementById('withdrawCoinImg');
+    const withdrawNetworkImg = document.getElementById('withdrawNetworkImg');
+    const withdrawSelectMain = document.getElementById('withdrawSelectMain');
+    const withdrawMinText = document.getElementById('withdrawMinText');
+    const withdrawBalanceAmount = document.getElementById('withdrawBalanceAmount');
+    const withdrawBalanceCode = document.getElementById('withdrawBalanceCode');
+
+    const withdrawBalances = {
+      USDTTRC20: 0,
+      BTC: 0,
+      ETH: 0
+    };
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarBackdrop.classList.toggle('open');
+    }
+
+    burgerToggle.addEventListener('click', toggleSidebar);
+    sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+    if (sidebarBurgerBtn) {
+      sidebarBurgerBtn.addEventListener('click', toggleSidebar);
+    }
+
+    // BALANCE PANEL
+    walletBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      if (window.innerWidth > 768) {
+        const rect = walletBtn.getBoundingClientRect();
+        balancePanel.style.left = rect.left + 'px';
+        balancePanel.style.top = (rect.bottom + 8) + 'px';
+      } else {
+        balancePanel.style.left = 'auto';
+        balancePanel.style.right = '12px';
+        balancePanel.style.top = '110px';
+      }
+
+      balanceOverlay.classList.toggle('open');
+      currencyDropdown.classList.remove('open');
+    });
+
+    balanceOverlay.addEventListener('click', (e) => {
+      if (!e.target.closest('.balance-panel')) {
+        balanceOverlay.classList.remove('open');
+        currencyDropdown.classList.remove('open');
+      }
+    });
+
+    currencySelect.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currencyDropdown.classList.toggle('open');
+    });
+
+    currencyDropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.currency-item');
+      if (!item) return;
+
+      const code   = item.getAttribute('data-code');
+      const symbol = item.getAttribute('data-symbol');
+
+      currencyCodeText.textContent = code;
+      currencyLabel.textContent = code;
+      walletCurrencySymbol.textContent = symbol;
+
+      document.querySelectorAll('.balance-main-amount, .bonus-amount')
+        .forEach(el => {
+          el.textContent = '0.00' + symbol;
+        });
+
+      currencyDropdown.classList.remove('open');
+    });
+
+    // WALLET MODAL
+    function openWalletModal() {
+      walletOverlay.classList.add('open');
+      setActiveTab('deposit');
+      openDepositSelectStep();
+    }
+
+    function closeWalletModal() {
+      walletOverlay.classList.remove('open');
+    }
+
+    depositBtn.addEventListener('click', openWalletModal);
+    walletOpenBtn.addEventListener('click', openWalletModal);
+
+    walletModalClose.addEventListener('click', closeWalletModal);
+    walletOverlay.addEventListener('click', (e) => {
+      if (e.target === walletOverlay) closeWalletModal();
+    });
+
+    function setActiveTab(tabName) {
+      walletTabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabName);
+      });
+      walletPanels.forEach(panel => {
+        panel.classList.toggle('active', panel.dataset.panel === tabName);
+      });
+
+      if (tabName !== 'deposit') {
+        walletBackBtn.classList.add('hidden');
+        walletModalTitle.textContent = tabName === 'withdraw' ? 'Вывод' : 'История';
+      }
+    }
+
+    walletTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        setActiveTab(tab.dataset.tab);
+        if (tab.dataset.tab === 'deposit') {
+          openDepositSelectStep();
+        }
+      });
+    });
+
+    function openDepositSelectStep() {
+      depositSelectStep.style.display = 'block';
+      depositPaymentStep.classList.remove('active');
+      walletBackBtn.classList.add('hidden');
+      walletModalTitle.textContent = 'Кошелек';
+    }
+
+    function openDepositPaymentStep(data) {
+      depositSelectStep.style.display = 'none';
+      depositPaymentStep.classList.add('active');
+      walletBackBtn.classList.remove('hidden');
+      walletModalTitle.textContent = 'Криптовалютный платеж';
+
+      const { network, min, symbol, coinImg, networkImg } = data;
+      if (coinImg) payCoinImg.src = coinImg;
+      if (networkImg) payNetworkImg.src = networkImg;
+
+      payMinAmount.textContent = `${min} ${symbol}`;
+      payNetwork.textContent = network;
+      payWarningCurrency.textContent = symbol;
+      payWarningNetwork.textContent = network;
+    }
+
+    walletBackBtn.addEventListener('click', openDepositSelectStep);
+
+    // клики по картам депозита
+    const cryptoGrid = document.getElementById('cryptoGrid');
+    cryptoGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.crypto-card');
+      if (!card) return;
+
+      const data = {
+        network: card.dataset.network,
+        min: card.dataset.min,
+        symbol: card.dataset.symbol,
+        coinImg: card.querySelector('.crypto-coin img')?.getAttribute('src'),
+        networkImg: card.querySelector('.crypto-network img')?.getAttribute('src'),
+      };
+
+      openDepositPaymentStep(data);
+    });
+
+    // копирование адреса
+    copyAddressBtn.addEventListener('click', () => {
+      const text = payAddress.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+      copyAddressBtn.textContent = 'Скопировано';
+      setTimeout(() => copyAddressBtn.textContent = 'Копировать', 1500);
+    });
+
+    // === ВЫВОД: селект валюты и баланс ===
+    withdrawSelectBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      withdrawDropdown.classList.toggle('open');
+    });
+
+    withdrawDropdown.addEventListener('click', (e) => {
+      const opt = e.target.closest('.withdraw-option');
+      if (!opt) return;
+
+      const code      = opt.getAttribute('data-code');
+      const mainText  = opt.getAttribute('data-main');
+      const min       = opt.getAttribute('data-min');
+      const shortCode = opt.getAttribute('data-short');
+      const coinImg   = opt.getAttribute('data-coin-img');
+      const netImg    = opt.getAttribute('data-net-img');
+
+      withdrawSelectMain.textContent = mainText;
+      withdrawCoinImg.src = coinImg;
+      withdrawNetworkImg.src = netImg;
+
+      withdrawMinText.textContent = `Минимальная сумма ${min} ${code}`;
+      withdrawBalanceCode.textContent = code;
+      withdrawBalanceAmount.textContent = (withdrawBalances[code] ?? 0).toFixed
+        ? withdrawBalances[code].toFixed(2)
+        : withdrawBalances[code];
+
+      withdrawDropdown.classList.remove('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.withdraw-select-wrapper')) {
+        withdrawDropdown.classList.remove('open');
+      }
+    });
+
+    /* ===== ОДИН АДАПТИВНЫЙ ПРОМО-БАННЕР ===== */
+
+const promoSlider = document.getElementById("promoSlider");
+
+const promoSlides = [
+  "banners/promo1.jpg",
+  "banners/promo2.jpg",
+  "banners/promo3.jpg"
+];
+
+let promoIndex = 0;
+
+function runPromoSlider() {
+  if (!promoSlider) return;
+
+  promoIndex = (promoIndex + 1) % promoSlides.length;
+  promoSlider.src = promoSlides[promoIndex];
+}
+
+// крутим баннер раз в 3 секунды, если он есть
+if (promoSlider) {
+  setInterval(runPromoSlider, 3000);
+}
+
+
+        /* ===== СТРЕЛКИ ДЛЯ КАЖДОЙ СЕКЦИИ С ИГРАМИ ===== */
+    document.querySelectorAll('.games-section').forEach(section => {
+      const row  = section.querySelector('.games-row');
+      const prev = section.querySelector('.games-arrow-prev');
+      const next = section.querySelector('.games-arrow-next');
+
+      if (!row || !prev || !next) return;
+
+      const step = 260; // ширина карточки + отступ
+
+      prev.addEventListener('click', () => {
+        row.scrollBy({ left: -step, behavior: 'smooth' });
+      });
+
+      next.addEventListener('click', () => {
+        row.scrollBy({ left: step, behavior: 'smooth' });
+      });
+    });
+
+    /* ===== НАВИГАЦИЯ ПО КАТЕГОРИЯМ СВЕРХУ ===== */
+        /* ===== НАВИГАЦИЯ ПО КАТЕГОРИЯМ СВЕРХУ ===== */
+    const filterBtns = document.querySelectorAll('.games-filter-btn');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+
+        // подсветка активной
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // "Все игры" — скроллим в начало блока игр
+        if (targetId === 'all') {
+          const firstSection = document.querySelector('.games-section');
+          if (!firstSection) return;
+          const offset = 100;
+          const top = firstSection.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+          return;
+        }
+
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        const offset = 100; // под высоту топ-бара
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+
+            /* ===== ПОИСК ПО ИГРАМ (от 3 символов) ===== */
+    const searchInput = document.getElementById('gameSearch');
+
+    if (searchInput) {
+      const allSections = document.querySelectorAll('.games-section');
+
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim().toLowerCase();
+
+        // если < 3 символов — показываем всё как было
+        if (q.length < 3) {
+          allSections.forEach(section => {
+            section.style.display = '';
+            section.querySelectorAll('.game-card').forEach(card => {
+              card.style.display = '';
+            });
+          });
+          return;
+        }
+
+        // фильтрация
+        allSections.forEach(section => {
+          let hasVisible = false;
+
+          section.querySelectorAll('.game-card').forEach(card => {
+            const titleEl = card.querySelector('.game-title');
+            const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+
+            if (title.includes(q)) {
+              card.style.display = '';
+              hasVisible = true;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // если в секции нет подходящих игр — скрываем секцию
+          section.style.display = hasVisible ? '' : 'none';
+        });
+      });
+    }
+
+
+
+
+
+        // ===== ПЕРЕХОД В ЛИЧНЫЙ КАБИНЕТ =====
+    const mainPage = document.getElementById('mainPage');
+    const profilePage = document.getElementById('profilePage');
+    const profileAvatar = document.querySelector('.profile-avatar');
+    const profileBackBtn = document.getElementById('profileBackBtn');
+
+    if (profileAvatar && mainPage && profilePage && profileBackBtn) {
+      // Открыть профиль по клику на аватар
+      profileAvatar.addEventListener('click', () => {
+        mainPage.style.display = 'none';
+        profilePage.style.display = 'block';
+        window.scrollTo(0, 0);
+      });
+
+      // Назад на главную
+      profileBackBtn.addEventListener('click', () => {
+        profilePage.style.display = 'none';
+        mainPage.style.display = 'block';
+        window.scrollTo(0, 0);
+      });
+    }
+
+    // ===== ЛОГИКА ТАБОВ Профиль / Безопасность =====
+    const profileTabButtons = document.querySelectorAll('.profile-tab');
+    const profileTabSection = document.getElementById('profileTab');
+    const securityTabSection = document.getElementById('securityTab');
+
+    profileTabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        profileTabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (btn.dataset.tab === 'profile') {
+          profileTabSection.style.display = 'block';
+          securityTabSection.style.display = 'none';
+        } else {
+          profileTabSection.style.display = 'none';
+          securityTabSection.style.display = 'block';
+        }
+      });
+    });
+
+    // ===== КОПИРОВАНИЕ ID В ПРОФИЛЕ =====
+    const copyIdBtn = document.getElementById('copyIdBtn');
+    if (copyIdBtn) {
+      copyIdBtn.addEventListener('click', () => {
+        const id = 'eb54460b'; // здесь можешь подставить реальный ID
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(id).catch(() => {});
+        }
+        copyIdBtn.textContent = 'Скопировано';
+        setTimeout(() => copyIdBtn.textContent = 'Копировать мой ID', 1500);
+      });
+    }
+
+        // ===== CRASH ROYAL: переключение экранов =====
+    const crashRoyalPage = document.getElementById('crashRoyalPage');
+    const crashBackBtn = document.getElementById('crashBackBtn');
+    const fastGameCards = document.querySelectorAll('[data-open-game="crash-royal"]');
+
+    if (crashRoyalPage && crashBackBtn && mainPage) {
+      fastGameCards.forEach(card => {
+        card.addEventListener('click', () => {
+          mainPage.style.display = 'none';
+          profilePage && (profilePage.style.display = 'none');
+          crashRoyalPage.style.display = 'block';
+          window.scrollTo(0, 0);
+        });
+      });
+
+      crashBackBtn.addEventListener('click', () => {
+        crashRoyalPage.style.display = 'none';
+        mainPage.style.display = 'block';
+        window.scrollTo(0, 0);
+      });
+    }
+
+        // ===== CRASH ROYAL: логика демо-игры (автораунды) =====
+const crashGraphLine = document.querySelector('.crash-graph-line');
+const crashBalanceEl    = document.getElementById('crashBalance');
+const crashMultiplierEl = document.getElementById('crashMultiplier');
+const crashStatusEl     = document.getElementById('crashStatus');
+const crashBetInput     = document.getElementById('crashBet');
+const crashStartBtn     = document.getElementById('crashStartBtn');
+const crashCashoutBtn   = document.getElementById('crashCashoutBtn');
+const crashLogEl        = document.getElementById('crashLog');
+const crashRoundsEl     = document.getElementById('crashRounds');
+const crashStepBtns     = document.querySelectorAll('.crash-step-btn');
+const crashQuickBtns    = document.querySelectorAll('.crash-quick-bet');
+const crashAutoBet      = document.getElementById('crashAutoBet');
+const crashAutoCashoutCheck = document.getElementById('crashAutoCashoutCheck');
+const crashAutoCashout  = document.getElementById('crashAutoCashout');
+
+let crashBalance = 1000;
+let crashCurrentMulti = 1.0;
+let crashInterval = null;       // таймер роста множителя
+let crashCountdownTimer = null; // таймер отсчёта до раунда
+let crashState = 'idle';        // 'countdown' | 'running'
+let crashCountdown = 0;
+
+let crashCurrentBet = 0;
+let crashJoined = false;        // игрок успел нажать Старт до начала раунда
+let crashCashedOut = false;     // уже забрал в этом раунде
+
+function updateCrashUI() {
+  if (crashBalanceEl) crashBalanceEl.textContent = crashBalance.toString();
+  if (crashMultiplierEl) crashMultiplierEl.textContent = crashCurrentMulti.toFixed(2);
+}
+
+function addCrashLogLine(text) {
+  if (!crashLogEl) return;
+  const div = document.createElement('div');
+  div.className = 'crash-log-line';
+  div.textContent = text;
+  crashLogEl.prepend(div);
+}
+
+function addCrashRound(multi) {
+  if (!crashRoundsEl) return;
+  const pill = document.createElement('button');
+  pill.className = 'crash-history-pill ' + (multi >= 2 ? 'win' : 'lose');
+  pill.textContent = multi.toFixed(2) + 'x';
+
+  crashRoundsEl.prepend(pill);
+
+  const pills = crashRoundsEl.querySelectorAll('.crash-history-pill');
+  if (pills.length > 12) {
+    pills[pills.length - 1].remove();
+  }
+}
+
+function resetCrashRound() {
+  crashCurrentMulti = 1.0;
+  updateCrashUI();
+  resetCrashVisuals();
+  crashJoined = false;
+  crashCashedOut = false;
+  crashCurrentBet = 0;
+}
+
+function getBetValue() {
+  if (!crashBetInput) return 0;
+  let bet = parseInt(crashBetInput.value, 10);
+  if (isNaN(bet) || bet <= 0) bet = 10;
+  crashBetInput.value = bet.toString();
+  return bet;
+}
+
+/* ===== ОТСЧЁТ ДО СЛЕДУЮЩЕГО РАУНДА ===== */
+// максимум, при котором график заполняет всё поле
+const CRASH_VISUAL_MAX_MULTI = 10;
+
+function updateCrashGraph() {
+  if (!crashGraphLine) return;
+
+  // нормализуем множитель в [0, 1]
+  let progress = (crashCurrentMulti - 1) / (CRASH_VISUAL_MAX_MULTI - 1);
+  if (progress < 0) progress = 0;
+  if (progress > 1) progress = 1;
+
+  // чем больше progress — тем дальше вправо и выше «стрелка»
+  const scaleX = 0.05 + progress * 0.95; // по X от 0.05 до 1
+  const scaleY = 0.15 + progress * 0.85; // по Y от 0.15 до 1
+
+  crashGraphLine.style.transition = 'transform .18s ease-out';
+  crashGraphLine.style.transform = `scaleX(${scaleX}) scaleY(${scaleY})`;
+}
+
+function resetCrashVisuals() {
+  if (!crashGraphLine) return;
+  crashGraphLine.style.transition = 'transform .18s ease-out';
+  crashGraphLine.style.transform = 'scaleX(0.05) scaleY(0.15)';
+}
+
+// моментальное «падение вниз» при краше
+function crashDropAnimation() {
+  if (!crashGraphLine) return;
+  // резко повернём линию вниз
+  crashGraphLine.style.transition = 'transform .20s ease-in';
+  crashGraphLine.style.transform = 'scaleX(1) scaleY(-0.1)';
+}
+
+function scheduleNextRound() {
+  crashState = 'countdown';
+  resetCrashRound();
+
+  crashCountdown = 5;
+  crashStatusEl.textContent = `До следующего раунда ${crashCountdown}...`;
+
+  crashStartBtn.disabled = false;
+  crashCashoutBtn.disabled = true;
+
+  if (crashCountdownTimer) clearInterval(crashCountdownTimer);
+
+  // авто-ставка: автоматически "жмём старт" перед раундом
+  if (crashAutoBet && crashAutoBet.checked) {
+    joinNextRound(true);
+  }
+
+  crashCountdownTimer = setInterval(() => {
+    crashCountdown--;
+    if (crashCountdown > 0) {
+      crashStatusEl.textContent = `До следующего раунда ${crashCountdown}...`;
+    } else {
+      clearInterval(crashCountdownTimer);
+      crashCountdownTimer = null;
+      startCrashRound(); // запуск раунда
+    }
+  }, 1000);
+}
+
+/* Игрок жмёт СТАРТ во время отсчёта (вход в следующий раунд) */
+function joinNextRound(fromAuto = false) {
+  if (crashState !== 'countdown' || crashJoined) return;
+
+  const bet = getBetValue();
+  if (!bet) return;
+
+  if (bet > crashBalance) {
+    if (!fromAuto) {
+      crashStatusEl.textContent = 'Недостаточно демо-очков для входа в раунд';
+    }
+    return;
+  }
+
+  crashBalance -= bet;
+  crashCurrentBet = bet;
+  crashJoined = true;
+  updateCrashUI();
+
+  crashStatusEl.textContent = 'Ты в следующем раунде. Ожидаем старт...';
+  crashStartBtn.disabled = true; // уже в раунде, повторно жать нельзя
+}
+
+/* ===== САМ РАУНД (множитель растёт, может быть краш) ===== */
+function startCrashRound() {
+  crashState = 'running';
+
+  crashStatusEl.textContent =
+    crashJoined
+      ? 'Раунд идёт! Жми «ЗАБРАТЬ» до краша'
+      : 'Раунд идёт (наблюдение). Ты не успел войти, жди следующий раунд.';
+
+  crashStartBtn.disabled = true;
+  crashCashoutBtn.disabled = !crashJoined;
+
+  const crashAt = 1.5 + Math.random() * 8.5; // где случится краш
+
+  if (crashInterval) clearInterval(crashInterval);
+
+  crashInterval = setInterval(() => {
+    // увеличение множителя
+    crashCurrentMulti += 0.03 + crashCurrentMulti * 0.015;
+    updateCrashUI();
+    updateCrashGraph(); // анимация графика
+
+    // авто-выход
+    const autoEnabled = crashJoined && crashAutoCashoutCheck && crashAutoCashoutCheck.checked;
+    const autoValue = autoEnabled ? parseFloat(crashAutoCashout.value || '0') : 0;
+
+    if (autoEnabled && autoValue >= 1.1 && !crashCashedOut && crashCurrentMulti >= autoValue) {
+      cashoutCrash(true);
+    }
+
+    // крэш
+    if (crashCurrentMulti >= crashAt) {
+
+      crashDropAnimation(); // ← стрелка падает вниз
+
+      clearInterval(crashInterval);
+      crashInterval = null;
+      crashState = 'idle';
+
+      if (crashJoined && !crashCashedOut) {
+        crashStatusEl.textContent = 'Краш! Твои очки в этом раунде сгорели.';
+        addCrashLogLine(`Краш на ×${crashCurrentMulti.toFixed(2)} (−${crashCurrentBet} CR).`);
+      } else if (!crashJoined) {
+        crashStatusEl.textContent =
+          `Раунд завершён: ×${crashCurrentMulti.toFixed(2)}. Ждём следующий.`;
+        addCrashLogLine(
+          `Набрано ×${crashCurrentMulti.toFixed(2)} (ты был наблюдателем).`
+        );
+      } else if (crashCashedOut) {
+        crashStatusEl.textContent =
+          `Раунд завершён: ×${crashCurrentMulti.toFixed(2)}. Ты уже забрал ранее.`;
+      }
+
+      addCrashRound(crashCurrentMulti);
+
+      crashCashoutBtn.disabled = true;
+
+      // запуск следующего отсчёта
+      setTimeout(scheduleNextRound, 1000);
+    }
+
+  }, 80);
+}
+
+
+/* Забрать во время раунда */
+function cashoutCrash(fromAuto = false) {
+  if (crashState !== 'running' || !crashJoined || crashCashedOut) return;
+
+  crashCashedOut = true;
+  crashCashoutBtn.disabled = true;
+
+  const win = Math.round(crashCurrentBet * crashCurrentMulti);
+  crashBalance += win;
+  updateCrashUI();
+
+  crashStatusEl.textContent = `Ты забрал ×${crashCurrentMulti.toFixed(2)} и получил ${win} CR`;
+  addCrashLogLine(`Забрал ×${crashCurrentMulti.toFixed(2)} (+${win} CR).`);
+
+  // если включена автоигра и это НЕ авто-выход — на следующем отсчёте снова войдём
+  if (crashAutoBet && crashAutoBet.checked && !fromAuto) {
+    // ничего не делаем здесь — вступление произойдёт в scheduleNextRound()
+  }
+}
+
+/* === обработчики кнопок === */
+if (crashStartBtn) {
+  crashStartBtn.addEventListener('click', () => joinNextRound(false));
+}
+
+if (crashCashoutBtn) {
+  crashCashoutBtn.addEventListener('click', () => cashoutCrash(false));
+}
+
+crashStepBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const step = parseInt(btn.dataset.step, 10) || 0;
+    const current = getBetValue();
+    let next = current + step;
+    if (next < 1) next = 1;
+    crashBetInput.value = next.toString();
+  });
+});
+
+crashQuickBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseInt(btn.dataset.quick, 10) || 0;
+    if (!val) return;
+    crashBetInput.value = val.toString();
+  });
+});
+
+/* стартуем игру сразу с отсчётом до первого раунда */
+updateCrashUI();
+scheduleNextRound();
+
+// ===== CHICKEN ROAD: переключение экранов =====
+const chickenRoadPage = document.getElementById('chickenRoadPage');
+const chickenBackBtn  = document.getElementById('chickenBackBtn');
+const chickenCards    = document.querySelectorAll('[data-open-game="chicken-road"]');
+
+if (chickenRoadPage && chickenBackBtn && mainPage) {
+  chickenCards.forEach(card => {
+    card.addEventListener('click', () => {
+      mainPage.style.display = 'none';
+      if (typeof profilePage !== 'undefined' && profilePage) {
+        profilePage.style.display = 'none';
+      }
+      chickenRoadPage.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+  });
+
+  chickenBackBtn.addEventListener('click', () => {
+    chickenRoadPage.style.display = 'none';
+    mainPage.style.display = 'block';
+    window.scrollTo(0, 0);
+  });
+}
+
+// ===== CHICKEN ROAD: логика =====
+const chickenBalanceEl   = document.getElementById('chickenBalance');
+const chickenBetInput    = document.getElementById('chickenBet');
+const chickenStatusEl    = document.getElementById('chickenStatus');
+const chickenPlayBtn     = document.getElementById('chickenPlayBtn');
+const chickenCashoutBtn  = document.getElementById('chickenCashoutBtn');
+const chickenLogEl       = document.getElementById('chickenLog');
+const chickenColumnsWrap = document.getElementById('chickenRoadColumns');
+const chickenStepBtns    = document.querySelectorAll('.chicken-step-btn');
+const chickenQuickBtns   = document.querySelectorAll('.chicken-quick-bet');
+const chickenDiffBtns    = document.querySelectorAll('.chicken-diff-btn');
+
+let chickenBalance      = 1000;
+let chickenCurrentBet   = 0;
+let chickenCurrentStep  = 0;
+let chickenBurnStep     = 0;
+let chickenRunning      = false;
+let chickenInterval     = null;
+let chickenCashedOut    = false;
+let chickenMode         = 'easy';
+
+const chickenMultipliers = {
+  easy:   [1.23, 1.55, 1.98, 2.56, 3.36, 4.49, 5.49, 7.50],
+  medium: [1.35, 1.75, 2.30, 3.10, 4.20, 5.60, 7.80, 10.0],
+  hard:   [1.50, 2.10, 3.00, 4.40, 6.20, 8.50, 12.0, 18.0],
+};
+
+// перерисовка множителей на монетках
+function renderChickenMultipliers() {
+  if (!chickenColumnsWrap) return;
+  const cols = chickenColumnsWrap.querySelectorAll('.chicken-bg-col');
+  const arr  = chickenMultipliers[chickenMode];
+
+  cols.forEach((col, index) => {
+    const v = arr[index];
+    const span = col.querySelector('.chicken-multi-value');
+    if (!span) return;
+
+    if (typeof v === 'number') {
+      span.textContent = v.toFixed(2) + 'x';
+      col.style.visibility = 'visible';
+    } else {
+      span.textContent = '';
+      col.style.visibility = 'hidden';
+    }
+  });
+}
+
+function updateChickenBalanceUI() {
+  if (chickenBalanceEl) chickenBalanceEl.textContent = chickenBalance.toString();
+}
+
+function addChickenLog(text) {
+  if (!chickenLogEl) return;
+  const div = document.createElement('div');
+  div.className = 'chicken-log-line';
+  div.textContent = text;
+  chickenLogEl.prepend(div);
+}
+
+function resetChickenColumns() {
+  if (!chickenColumnsWrap) return;
+  chickenColumnsWrap.querySelectorAll('.chicken-bg-col').forEach(col => {
+    col.classList.remove('active', 'burn', 'safe');
+  });
+}
+
+function getChickenBet() {
+  if (!chickenBetInput) return 0;
+  let bet = parseInt(chickenBetInput.value, 10);
+  if (isNaN(bet) || bet <= 0) bet = 10;
+  chickenBetInput.value = bet.toString();
+  return bet;
+}
+
+function startChickenRound() {
+  if (chickenRunning) return;
+
+  const bet = getChickenBet();
+  if (!bet) return;
+
+  if (bet > chickenBalance) {
+    chickenStatusEl.textContent = 'Недостаточно демо-очков для этого раунда';
+    return;
+  }
+
+  chickenBalance      -= bet;
+  chickenCurrentBet    = bet;
+  chickenCurrentStep   = 0;
+  chickenCashedOut     = false;
+  chickenRunning       = true;
+
+  updateChickenBalanceUI();
+  resetChickenColumns();
+
+  // случайная "прожарка"
+  const maxStep = chickenMultipliers[chickenMode].length;
+  chickenBurnStep = 1 + Math.floor(Math.random() * maxStep);
+
+  chickenStatusEl.textContent = 'Курица побежала! Жми «Забрать» пока не прожарили 🐔';
+  chickenPlayBtn.disabled    = true;
+  chickenCashoutBtn.disabled = false;
+
+  const cols = chickenColumnsWrap.querySelectorAll('.chicken-bg-col');
+
+  chickenInterval = setInterval(() => {
+    chickenCurrentStep++;
+
+    // прожарка
+    if (chickenCurrentStep === chickenBurnStep) {
+      clearInterval(chickenInterval);
+      chickenInterval = null;
+      chickenRunning  = false;
+
+      cols.forEach(col => col.classList.remove('active'));
+      const burnCol = chickenColumnsWrap.querySelector(`.chicken-bg-col[data-step="${chickenCurrentStep}"]`);
+      if (burnCol) burnCol.classList.add('burn');
+
+      chickenStatusEl.textContent = 'Курицу поджарили! Очки в этом раунде сгорели.';
+      addChickenLog(`Прожарка на шаге ${chickenCurrentStep} (−${chickenCurrentBet} CR).`);
+
+      chickenPlayBtn.disabled    = false;
+      chickenCashoutBtn.disabled = true;
+      return;
+    }
+
+    // безопасный шаг
+    cols.forEach(col => col.classList.remove('active'));
+    const safeCol = chickenColumnsWrap.querySelector(`.chicken-bg-col[data-step="${chickenCurrentStep}"]`);
+    if (safeCol) {
+      safeCol.classList.add('active');
+      // все предыдущие — safe
+      for (let i = 1; i < chickenCurrentStep; i++) {
+        const prev = chickenColumnsWrap.querySelector(`.chicken-bg-col[data-step="${i}"]`);
+        prev && prev.classList.add('safe');
+      }
+    }
+
+    const multi = chickenMultipliers[chickenMode][chickenCurrentStep - 1];
+    chickenStatusEl.textContent = `Текущий множитель: ×${multi.toFixed(2)}. Можно забрать или ждать дальше.`;
+
+    // дошли до конца и выжили
+    const maxStepInner = chickenMultipliers[chickenMode].length;
+    if (chickenCurrentStep >= maxStepInner) {
+      clearInterval(chickenInterval);
+      chickenInterval = null;
+      chickenRunning  = false;
+      chickenCashout(true); // авто-забор
+    }
+  }, 900);
+}
+
+function chickenCashout(fromAuto = false) {
+  if (!chickenRunning || chickenCurrentStep === 0 || chickenCashedOut) return;
+
+  clearInterval(chickenInterval);
+  chickenInterval = null;
+  chickenRunning  = false;
+  chickenCashedOut= true;
+
+  const multi = chickenMultipliers[chickenMode][chickenCurrentStep - 1];
+  const win   = Math.round(chickenCurrentBet * multi);
+
+  chickenBalance += win;
+  updateChickenBalanceUI();
+
+  // подсветить безопасные клетки
+  for (let i = 1; i <= chickenCurrentStep; i++) {
+    const c = chickenColumnsWrap.querySelector(`.chicken-bg-col[data-step="${i}"]`);
+    c && c.classList.add('safe');
+  }
+
+  chickenStatusEl.textContent = `Ты забрал ×${multi.toFixed(2)} и получил ${win} CR`;
+  addChickenLog(`Забрал ×${multi.toFixed(2)} (+${win} CR).`);
+
+  chickenPlayBtn.disabled    = false;
+  chickenCashoutBtn.disabled = true;
+}
+
+if (chickenPlayBtn && chickenCashoutBtn) {
+  chickenPlayBtn.addEventListener('click', startChickenRound);
+  chickenCashoutBtn.addEventListener('click', () => chickenCashout(false));
+}
+
+// +/- и быстрые кнопки
+chickenStepBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const step    = parseInt(btn.dataset.step, 10) || 0;
+    const current = getChickenBet();
+    let next      = current + step;
+    if (next < 1) next = 1;
+    chickenBetInput.value = next.toString();
+  });
+});
+
+chickenQuickBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseInt(btn.dataset.quick, 10) || 0;
+    if (!val) return;
+    chickenBetInput.value = val.toString();
+  });
+});
+
+// переключение сложности
+chickenDiffBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    chickenDiffBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    chickenMode = btn.dataset.mode || 'easy';
+    renderChickenMultipliers();
+    chickenStatusEl.textContent =
+      'Сложность изменена. Нажми «Играть», чтобы начать раунд.';
+  });
+});
+
+updateChickenBalanceUI();
+renderChickenMultipliers();
+
+// ===== SLOT ROYAL SPIN: переключение экранов =====
+const slotRoyalPage = document.getElementById('slotRoyalPage');
+const slotBackBtn   = document.getElementById('slotBackBtn');
+const slotCards     = document.querySelectorAll('[data-open-game="slot-royal"]');
+
+if (slotRoyalPage && slotBackBtn && mainPage) {
+  slotCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // скрыть другие страницы, если есть
+      if (typeof profilePage !== 'undefined' && profilePage) profilePage.style.display = 'none';
+      if (typeof crashRoyalPage !== 'undefined' && crashRoyalPage) crashRoyalPage.style.display = 'none';
+      if (typeof chickenRoadPage !== 'undefined' && chickenRoadPage) chickenRoadPage.style.display = 'none';
+
+      mainPage.style.display = 'none';
+      slotRoyalPage.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+  });
+
+  slotBackBtn.addEventListener('click', () => {
+    slotRoyalPage.style.display = 'none';
+    mainPage.style.display = 'block';
+    window.scrollTo(0, 0);
+  });
+}
+
+
+// ===== SLOT ROYAL SPIN: логика =====
+const slotBalanceEl = document.getElementById('slotBalance');
+const slotBetInput  = document.getElementById('slotBet');
+const slotSpinBtn   = document.getElementById('slotSpinBtn');
+const slotStatusEl  = document.getElementById('slotStatus');
+const slotLogEl     = document.getElementById('slotLog');
+const slotReelsEl   = document.getElementById('slotReels');
+const slotStepBtns  = document.querySelectorAll('.slot-step-btn');
+const slotQuickBtns = document.querySelectorAll('.slot-quick-bet');
+
+const SLOT_ROWS = 3;
+const SLOT_COLS = 5;
+
+let slotBalance  = 1000;
+let slotSpinning = false;
+
+// матрица 3×5 текущего спина
+let slotMatrix = Array.from({ length: SLOT_ROWS }, () =>
+  Array(SLOT_COLS).fill(null)
+);
+
+// пути к картинкам (замени на свои)
+const slotSymbols = [
+  {
+    id: 'A',
+    img: 'symbols/cherry.png',   // вишня
+    pay: {3: 20, 4: 40, 5: 80},
+    weight: 6
+  },
+  {
+    id: 'B',
+    img: 'symbols/lemon.png',    // лимон
+    pay: {3: 15, 4: 30, 5: 60},
+    weight: 7
+  },
+  {
+    id: 'C',
+    img: 'symbols/grape.png',    // виноград
+    pay: {3: 25, 4: 50, 5: 100},
+    weight: 5
+  },
+  {
+    id: 'D',
+    img: 'symbols/diamond.png',  // алмаз
+    pay: {3: 40, 4: 80, 5: 150},
+    weight: 3
+  },
+  {
+    id: 'E',
+    img: 'symbols/crown.png',    // корона
+    pay: {3: 60, 4: 150, 5: 300},
+    weight: 2
+  },
+];
+
+function updateSlotBalanceUI() {
+  if (slotBalanceEl) slotBalanceEl.textContent = slotBalance.toString();
+}
+
+function addSlotLog(text) {
+  if (!slotLogEl) return;
+  const div = document.createElement('div');
+  div.className = 'slot-log-line';
+  div.textContent = text;
+  slotLogEl.prepend(div);
+}
+
+function getSlotBet() {
+  if (!slotBetInput) return 0;
+  let bet = parseInt(slotBetInput.value, 10);
+  if (isNaN(bet) || bet <= 0) bet = 10;
+  slotBetInput.value = bet.toString();
+  return bet;
+}
+
+// случайный символ с учётом веса
+function getRandomSymbol() {
+  const totalWeight = slotSymbols.reduce((sum, s) => sum + s.weight, 0);
+  let rnd = Math.random() * totalWeight;
+  for (const s of slotSymbols) {
+    if (rnd < s.weight) return s;
+    rnd -= s.weight;
+  }
+  return slotSymbols[0];
+}
+
+// рисуем один барабан по матрице
+function renderReelFromMatrix(reelIndex) {
+  const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${reelIndex}"]`);
+  if (!reelEl) return;
+  const symbolsEls = reelEl.querySelectorAll('.slot-symbol');
+  symbolsEls.forEach(symEl => symEl.classList.remove('slot-symbol-win'));
+
+  for (let row = 0; row < SLOT_ROWS; row++) {
+    const sym = slotMatrix[row][reelIndex];
+    const cell = reelEl.querySelector(`.slot-symbol[data-row="${row}"]`);
+    if (cell && sym) {
+      cell.innerHTML = `<img src="${sym.img}" alt="">`;
+    }
+  }
+}
+
+// рендер всей матрицы
+function renderFullMatrix() {
+  for (let col = 0; col < SLOT_COLS; col++) {
+    renderReelFromMatrix(col);
+  }
+}
+
+// подсветка выигрыша по средней линии
+function highlightWinOnMiddle(count) {
+  const rowIndex = 1; // средний ряд
+  for (let col = 0; col < count; col++) {
+    const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${col}"]`);
+    if (!reelEl) continue;
+    const cell = reelEl.querySelector(`.slot-symbol[data-row="${rowIndex}"]`);
+    if (cell) cell.classList.add('slot-symbol-win');
+  }
+}
+
+// анимация спина — барабан за барабаном
+function spinSlot() {
+  if (slotSpinning) return;
+
+  const bet = getSlotBet();
+  if (!bet) return;
+
+  if (bet > slotBalance) {
+    slotStatusEl.textContent = 'Недостаточно демо-монет для этого спина';
+    return;
+  }
+
+  slotBalance -= bet;
+  updateSlotBalanceUI();
+
+  slotSpinning = true;
+  slotSpinBtn.disabled = true;
+  slotStatusEl.textContent = 'Крутим барабаны...';
+
+  // сброс матрицы
+  slotMatrix = Array.from({ length: SLOT_ROWS }, () =>
+    Array(SLOT_COLS).fill(null)
+  );
+
+  // функция "крутить конкретный барабан"
+  let reelsStopped = 0;
+
+  for (let col = 0; col < SLOT_COLS; col++) {
+    startReelSpin(col, 200 * col); // задержка для поочерёдной остановки
+  }
+
+  function startReelSpin(col, delay) {
+    const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${col}"]`);
+    if (!reelEl) return;
+
+    const cells = reelEl.querySelectorAll('.slot-symbol');
+    reelEl.classList.add('slot-reel-spinning');
+
+    // быстрый "рандом" для этого барабана
+    let frames = 10;
+    const interval = setInterval(() => {
+      cells.forEach(cell => {
+        const randSym = getRandomSymbol();
+        cell.innerHTML = `<img src="${randSym.img}" alt="">`;
+      });
+      frames--;
+      if (frames <= 0) {
+        clearInterval(interval);
+      }
+    }, 60);
+
+    // финальная остановка с задержкой
+    setTimeout(() => {
+      clearInterval(interval);
+
+      // финальные символы для трёх рядов
+      for (let row = 0; row < SLOT_ROWS; row++) {
+        slotMatrix[row][col] = getRandomSymbol();
+      }
+      renderReelFromMatrix(col);
+      reelEl.classList.remove('slot-reel-spinning');
+
+      reelsStopped++;
+      if (reelsStopped >= SLOT_COLS) {
+        // все барабаны остановились — считаем выигрыш
+        finishSlotSpin(bet);
+      }
+    }, 600 + delay); // базовая длительность + задержка по колонке
+  }
+}
+
+function finishSlotSpin(bet) {
+  // считаем только среднюю линию (row 1)
+  const rowIndex = 1;
+  const row = slotMatrix[rowIndex];
+
+  const first = row[0];
+  let count = 1;
+  for (let c = 1; c < row.length; c++) {
+    if (row[c].id === first.id) {
+      count++;
+    } else {
+      break;
+    }
+  }
+
+  let win = 0;
+  const payTable = first.pay || {};
+  if (count >= 3 && payTable[count]) {
+    win = bet * (payTable[count] / 10);
+    highlightWinOnMiddle(count);
+  }
+
+  if (win > 0) {
+    slotBalance += win;
+    updateSlotBalanceUI();
+    slotStatusEl.textContent = `Выигрыш: ${win} CR!`;
+    addSlotLog(`Выигрыш ${win} CR (символ ${first.id} ×${count})`);
+  } else {
+    slotStatusEl.textContent = 'Без выигрыша. Попробуй ещё раз.';
+    addSlotLog('Спин без выигрыша.');
+  }
+
+  slotSpinning = false;
+  slotSpinBtn.disabled = false;
+}
+
+if (slotSpinBtn) {
+  slotSpinBtn.addEventListener('click', spinSlot);
+}
+
+// +/- и быстрые кнопки ставки
+slotStepBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const step = parseInt(btn.dataset.step, 10) || 0;
+    const current = getSlotBet();
+    let next = current + step;
+    if (next < 1) next = 1;
+    slotBetInput.value = next.toString();
+  });
+});
+
+slotQuickBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseInt(btn.dataset.quick, 10) || 0;
+    if (!val) return;
+    slotBetInput.value = val.toString();
+  });
+});
+
+updateSlotBalanceUI();
+
+
+
+
+
+  </script>
+</body>
+</html>
