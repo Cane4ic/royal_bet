@@ -2505,6 +2505,247 @@
   }
 }
 
+/* ===== SLOT: ROYAL SPIN (5 барабанов) ===== */
+
+.slot-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.slot-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.slot-title {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.slot-subtitle {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.slot-balance-block {
+  text-align: right;
+}
+
+.slot-label {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 4px;
+}
+
+.slot-balance {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Барабаны */
+
+.slot-board {
+  background: radial-gradient(circle at 20% 0%, #7b1338, #43001b);
+  border-radius: 24px;
+  border: 3px solid #f4c24e;
+  padding: 16px 18px;
+  box-shadow: 0 22px 50px rgba(0,0,0,0.85);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.slot-board::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 18px;
+  border: 2px solid rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+
+.slot-reels {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  height: 260px;
+}
+
+.slot-reel {
+  flex: 1;
+  border-radius: 18px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent 40%, rgba(0,0,0,0.35));
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,0.1),
+    inset 0 -8px 20px rgba(0,0,0,0.55);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* вертикальные золотые полосы между барабанами */
+.slot-reel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  width: 4px;
+  background: linear-gradient(to bottom, #ffe699, #ffbd3c);
+  box-shadow: 4px 0 8px rgba(0,0,0,0.7);
+  opacity: 0.9;
+}
+
+/* ячейки внутри барабана (визуально в одной колонке) */
+
+.slot-symbol {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.slot-symbol img {
+  width: 72%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+  transition: transform .15s ease-out, filter .15s ease-out, opacity .15s ease-out;
+}
+
+.slot-symbol-win img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 16px rgba(255,230,140,1));
+}
+
+/* состояние "крутится" */
+
+.slot-reel-spinning img {
+  animation: slot-reel-spin 0.28s linear infinite;
+  filter: blur(2px) brightness(1.1);
+  opacity: 0.85;
+}
+
+@keyframes slot-reel-spin {
+  0%   { transform: translateY(-60%); }
+  50%  { transform: translateY(0%); }
+  100% { transform: translateY(60%); }
+}
+
+/* нижняя панель */
+
+.slot-bottom {
+  background: #111318;
+  border-radius: 16px;
+  border: 1px solid #262932;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) minmax(0, 0.7fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.slot-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #151821;
+  border-radius: 10px;
+  border: 1px solid #252733;
+  padding: 3px 6px;
+}
+
+.slot-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 14px;
+  text-align: center;
+}
+
+.slot-step-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: #111318;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.slot-quick-bets {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.slot-quick-bet {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #252733;
+  background: #111318;
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.slot-lines {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.slot-status {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.slot-main-btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #111;
+  box-shadow: 0 12px 24px rgba(255,182,70,0.5);
+}
+
+.slot-main-btn:disabled {
+  opacity: .4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.slot-log {
+  margin-top: 10px;
+  max-height: 110px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.slot-log-line { margin-bottom: 2px; }
+
+@media (max-width: 960px) {
+  .slot-bottom {
+    grid-template-columns: 1fr;
+  }
+  .slot-reels {
+    height: 220px;
+  }
+}
+
+
 
   </style>
 </head>
@@ -2729,16 +2970,19 @@
 
   <div class="games-row">
     <!-- здесь ТВОИ карточки слотов -->
-    <article class="game-card">
-  <div class="game-badge">Популярная</div>
+    <!-- КАРТОЧКА СЛОТА В ЛОББИ -->
+<article class="game-card" data-open-game="slot-royal">
+  <div class="game-badge">Слот</div>
   <div class="game-thumb">
-    <img src="games/chicken-road.jpg" alt="Chicken Road">
+    <!-- можешь заменить на свой баннер -->
+    <img src="games/slot-royal.jpg" alt="Royal Spin">
   </div>
   <div class="game-info">
-    <div class="game-title">Chicken Road</div>
-    <div class="game-provider">ENDORPHINA</div>
+    <div class="game-title">Royal Spin</div>
+    <div class="game-provider">ROYAL STUDIO</div>
   </div>
 </article>
+
 
 <article class="game-card">
   <div class="game-badge">Новинка</div>
@@ -3338,6 +3582,90 @@
     <div class="chicken-log" id="chickenLog"></div>
   </section>
 </main>
+
+<!-- СТРАНИЦА СЛОТА ROYAL SPIN -->
+<main class="page-content" id="slotRoyalPage" style="display:none;">
+  <button class="profile-back-btn" id="slotBackBtn">← Назад в лобби</button>
+
+  <section class="slot-wrapper">
+    <div class="slot-header-row">
+      <div>
+        <h1 class="slot-title">Royal Spin</h1>
+        <p class="slot-subtitle">Демо-режим • играешь на условные монеты</p>
+      </div>
+      <div class="slot-balance-block">
+        <div class="slot-label">Демо баланс</div>
+        <div class="slot-balance"><span id="slotBalance">1000</span> CR</div>
+      </div>
+    </div>
+
+    <!-- БАРАБАНЫ -->
+    <div class="slot-board">
+      <div class="slot-reels" id="slotReels">
+        <!-- 5 барабанов по 3 символа -->
+        <div class="slot-reel" data-reel="0">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="1">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="2">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="3">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+        <div class="slot-reel" data-reel="4">
+          <div class="slot-symbol" data-row="0"></div>
+          <div class="slot-symbol" data-row="1"></div>
+          <div class="slot-symbol" data-row="2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <div class="slot-bottom">
+      <div class="slot-bottom-left">
+        <div class="slot-label">Ставка за спин</div>
+        <div class="slot-input-wrap">
+          <button class="slot-step-btn" data-step="-10">−</button>
+          <input id="slotBet" class="slot-input" type="number" min="1" step="1" value="10">
+          <button class="slot-step-btn" data-step="10">+</button>
+        </div>
+        <div class="slot-quick-bets">
+          <button class="slot-quick-bet" data-quick="10">10</button>
+          <button class="slot-quick-bet" data-quick="25">25</button>
+          <button class="slot-quick-bet" data-quick="50">50</button>
+          <button class="slot-quick-bet" data-quick="100">100</button>
+        </div>
+      </div>
+
+      <div class="slot-bottom-center">
+        <div class="slot-label">Линии</div>
+        <div class="slot-lines">1 линия (средний ряд)</div>
+        <div class="slot-status" id="slotStatus">
+          Нажми «SPIN», чтобы крутить барабаны
+        </div>
+      </div>
+
+      <div class="slot-bottom-right">
+        <button class="slot-main-btn" id="slotSpinBtn">SPIN</button>
+      </div>
+    </div>
+
+    <div class="slot-log" id="slotLog"></div>
+  </section>
+</main>
+
+
 
 
 
@@ -4751,6 +5079,285 @@ chickenDiffBtns.forEach(btn => {
 
 updateChickenBalanceUI();
 renderChickenMultipliers();
+
+// ===== SLOT ROYAL SPIN: переключение экранов =====
+const slotRoyalPage = document.getElementById('slotRoyalPage');
+const slotBackBtn   = document.getElementById('slotBackBtn');
+const slotCards     = document.querySelectorAll('[data-open-game="slot-royal"]');
+
+if (slotRoyalPage && slotBackBtn && mainPage) {
+  slotCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // скрыть другие страницы, если есть
+      if (typeof profilePage !== 'undefined' && profilePage) profilePage.style.display = 'none';
+      if (typeof crashRoyalPage !== 'undefined' && crashRoyalPage) crashRoyalPage.style.display = 'none';
+      if (typeof chickenRoadPage !== 'undefined' && chickenRoadPage) chickenRoadPage.style.display = 'none';
+
+      mainPage.style.display = 'none';
+      slotRoyalPage.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
+  });
+
+  slotBackBtn.addEventListener('click', () => {
+    slotRoyalPage.style.display = 'none';
+    mainPage.style.display = 'block';
+    window.scrollTo(0, 0);
+  });
+}
+
+
+// ===== SLOT ROYAL SPIN: логика =====
+const slotBalanceEl = document.getElementById('slotBalance');
+const slotBetInput  = document.getElementById('slotBet');
+const slotSpinBtn   = document.getElementById('slotSpinBtn');
+const slotStatusEl  = document.getElementById('slotStatus');
+const slotLogEl     = document.getElementById('slotLog');
+const slotReelsEl   = document.getElementById('slotReels');
+const slotStepBtns  = document.querySelectorAll('.slot-step-btn');
+const slotQuickBtns = document.querySelectorAll('.slot-quick-bet');
+
+const SLOT_ROWS = 3;
+const SLOT_COLS = 5;
+
+let slotBalance  = 1000;
+let slotSpinning = false;
+
+// матрица 3×5 текущего спина
+let slotMatrix = Array.from({ length: SLOT_ROWS }, () =>
+  Array(SLOT_COLS).fill(null)
+);
+
+// пути к картинкам (замени на свои)
+const slotSymbols = [
+  {
+    id: 'A',
+    img: 'symbols/cherry.png',   // вишня
+    pay: {3: 20, 4: 40, 5: 80},
+    weight: 6
+  },
+  {
+    id: 'B',
+    img: 'symbols/lemon.png',    // лимон
+    pay: {3: 15, 4: 30, 5: 60},
+    weight: 7
+  },
+  {
+    id: 'C',
+    img: 'symbols/grape.png',    // виноград
+    pay: {3: 25, 4: 50, 5: 100},
+    weight: 5
+  },
+  {
+    id: 'D',
+    img: 'symbols/diamond.png',  // алмаз
+    pay: {3: 40, 4: 80, 5: 150},
+    weight: 3
+  },
+  {
+    id: 'E',
+    img: 'symbols/crown.png',    // корона
+    pay: {3: 60, 4: 150, 5: 300},
+    weight: 2
+  },
+];
+
+function updateSlotBalanceUI() {
+  if (slotBalanceEl) slotBalanceEl.textContent = slotBalance.toString();
+}
+
+function addSlotLog(text) {
+  if (!slotLogEl) return;
+  const div = document.createElement('div');
+  div.className = 'slot-log-line';
+  div.textContent = text;
+  slotLogEl.prepend(div);
+}
+
+function getSlotBet() {
+  if (!slotBetInput) return 0;
+  let bet = parseInt(slotBetInput.value, 10);
+  if (isNaN(bet) || bet <= 0) bet = 10;
+  slotBetInput.value = bet.toString();
+  return bet;
+}
+
+// случайный символ с учётом веса
+function getRandomSymbol() {
+  const totalWeight = slotSymbols.reduce((sum, s) => sum + s.weight, 0);
+  let rnd = Math.random() * totalWeight;
+  for (const s of slotSymbols) {
+    if (rnd < s.weight) return s;
+    rnd -= s.weight;
+  }
+  return slotSymbols[0];
+}
+
+// рисуем один барабан по матрице
+function renderReelFromMatrix(reelIndex) {
+  const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${reelIndex}"]`);
+  if (!reelEl) return;
+  const symbolsEls = reelEl.querySelectorAll('.slot-symbol');
+  symbolsEls.forEach(symEl => symEl.classList.remove('slot-symbol-win'));
+
+  for (let row = 0; row < SLOT_ROWS; row++) {
+    const sym = slotMatrix[row][reelIndex];
+    const cell = reelEl.querySelector(`.slot-symbol[data-row="${row}"]`);
+    if (cell && sym) {
+      cell.innerHTML = `<img src="${sym.img}" alt="">`;
+    }
+  }
+}
+
+// рендер всей матрицы
+function renderFullMatrix() {
+  for (let col = 0; col < SLOT_COLS; col++) {
+    renderReelFromMatrix(col);
+  }
+}
+
+// подсветка выигрыша по средней линии
+function highlightWinOnMiddle(count) {
+  const rowIndex = 1; // средний ряд
+  for (let col = 0; col < count; col++) {
+    const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${col}"]`);
+    if (!reelEl) continue;
+    const cell = reelEl.querySelector(`.slot-symbol[data-row="${rowIndex}"]`);
+    if (cell) cell.classList.add('slot-symbol-win');
+  }
+}
+
+// анимация спина — барабан за барабаном
+function spinSlot() {
+  if (slotSpinning) return;
+
+  const bet = getSlotBet();
+  if (!bet) return;
+
+  if (bet > slotBalance) {
+    slotStatusEl.textContent = 'Недостаточно демо-монет для этого спина';
+    return;
+  }
+
+  slotBalance -= bet;
+  updateSlotBalanceUI();
+
+  slotSpinning = true;
+  slotSpinBtn.disabled = true;
+  slotStatusEl.textContent = 'Крутим барабаны...';
+
+  // сброс матрицы
+  slotMatrix = Array.from({ length: SLOT_ROWS }, () =>
+    Array(SLOT_COLS).fill(null)
+  );
+
+  // функция "крутить конкретный барабан"
+  let reelsStopped = 0;
+
+  for (let col = 0; col < SLOT_COLS; col++) {
+    startReelSpin(col, 200 * col); // задержка для поочерёдной остановки
+  }
+
+  function startReelSpin(col, delay) {
+    const reelEl = slotReelsEl.querySelector(`.slot-reel[data-reel="${col}"]`);
+    if (!reelEl) return;
+
+    const cells = reelEl.querySelectorAll('.slot-symbol');
+    reelEl.classList.add('slot-reel-spinning');
+
+    // быстрый "рандом" для этого барабана
+    let frames = 10;
+    const interval = setInterval(() => {
+      cells.forEach(cell => {
+        const randSym = getRandomSymbol();
+        cell.innerHTML = `<img src="${randSym.img}" alt="">`;
+      });
+      frames--;
+      if (frames <= 0) {
+        clearInterval(interval);
+      }
+    }, 60);
+
+    // финальная остановка с задержкой
+    setTimeout(() => {
+      clearInterval(interval);
+
+      // финальные символы для трёх рядов
+      for (let row = 0; row < SLOT_ROWS; row++) {
+        slotMatrix[row][col] = getRandomSymbol();
+      }
+      renderReelFromMatrix(col);
+      reelEl.classList.remove('slot-reel-spinning');
+
+      reelsStopped++;
+      if (reelsStopped >= SLOT_COLS) {
+        // все барабаны остановились — считаем выигрыш
+        finishSlotSpin(bet);
+      }
+    }, 600 + delay); // базовая длительность + задержка по колонке
+  }
+}
+
+function finishSlotSpin(bet) {
+  // считаем только среднюю линию (row 1)
+  const rowIndex = 1;
+  const row = slotMatrix[rowIndex];
+
+  const first = row[0];
+  let count = 1;
+  for (let c = 1; c < row.length; c++) {
+    if (row[c].id === first.id) {
+      count++;
+    } else {
+      break;
+    }
+  }
+
+  let win = 0;
+  const payTable = first.pay || {};
+  if (count >= 3 && payTable[count]) {
+    win = bet * (payTable[count] / 10);
+    highlightWinOnMiddle(count);
+  }
+
+  if (win > 0) {
+    slotBalance += win;
+    updateSlotBalanceUI();
+    slotStatusEl.textContent = `Выигрыш: ${win} CR!`;
+    addSlotLog(`Выигрыш ${win} CR (символ ${first.id} ×${count})`);
+  } else {
+    slotStatusEl.textContent = 'Без выигрыша. Попробуй ещё раз.';
+    addSlotLog('Спин без выигрыша.');
+  }
+
+  slotSpinning = false;
+  slotSpinBtn.disabled = false;
+}
+
+if (slotSpinBtn) {
+  slotSpinBtn.addEventListener('click', spinSlot);
+}
+
+// +/- и быстрые кнопки ставки
+slotStepBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const step = parseInt(btn.dataset.step, 10) || 0;
+    const current = getSlotBet();
+    let next = current + step;
+    if (next < 1) next = 1;
+    slotBetInput.value = next.toString();
+  });
+});
+
+slotQuickBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = parseInt(btn.dataset.quick, 10) || 0;
+    if (!val) return;
+    slotBetInput.value = val.toString();
+  });
+});
+
+updateSlotBalanceUI();
 
 
 
